@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Parse
+
+let MainTableViewControllerEstimatedRowHeight = 43.0
 
 class MainTableViewController: UITableViewController {
     
@@ -17,7 +20,7 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 43
+        tableView.estimatedRowHeight = CGFloat(MainTableViewControllerEstimatedRowHeight)
         addNotifications()
     }
     
