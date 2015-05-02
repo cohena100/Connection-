@@ -13,6 +13,7 @@
 		046428431AF4B9D2000EC419 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 046428411AF4B9D2000EC419 /* LaunchScreen.xib */; };
 		0464284F1AF4B9D2000EC419 /* Connection_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */; };
 		046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428581AF4C160000EC419 /* MainTableViewController.swift */; };
+		04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		0464284D1AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection_Tests.swift; sourceTree = "<group>"; };
 		046428581AF4C160000EC419 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				046428381AF4B9D2000EC419 /* AppDelegate.swift */,
 				046428581AF4C160000EC419 /* MainTableViewController.swift */,
+				04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */,
 				0464283C1AF4B9D2000EC419 /* Main.storyboard */,
 				0464283F1AF4B9D2000EC419 /* Images.xcassets */,
 				046428411AF4B9D2000EC419 /* LaunchScreen.xib */,
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */,
+				04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */,
 				046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +420,7 @@
 				046428541AF4B9D2000EC419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		046428551AF4B9D2000EC419 /* Build configuration list for PBXNativeTarget "Connection!Tests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +429,7 @@
 				046428571AF4B9D2000EC419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
