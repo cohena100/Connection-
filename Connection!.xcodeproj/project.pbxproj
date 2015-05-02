@@ -13,6 +13,7 @@
 		046428401AF4B9D2000EC419 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0464283F1AF4B9D2000EC419 /* Images.xcassets */; };
 		046428431AF4B9D2000EC419 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 046428411AF4B9D2000EC419 /* LaunchScreen.xib */; };
 		0464284F1AF4B9D2000EC419 /* Connection_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */; };
+		046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428581AF4C160000EC419 /* MainTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		046428481AF4B9D2000EC419 /* Connection!Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Connection!Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0464284D1AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection_Tests.swift; sourceTree = "<group>"; };
+		046428581AF4C160000EC419 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				046428381AF4B9D2000EC419 /* AppDelegate.swift */,
+				046428581AF4C160000EC419 /* MainTableViewController.swift */,
 				0464283A1AF4B9D2000EC419 /* ViewController.swift */,
 				0464283C1AF4B9D2000EC419 /* Main.storyboard */,
 				0464283F1AF4B9D2000EC419 /* Images.xcassets */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0464283B1AF4B9D2000EC419 /* ViewController.swift in Sources */,
+				046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */,
 				046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
