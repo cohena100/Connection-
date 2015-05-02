@@ -28,6 +28,7 @@
                 <constraint firstAttribute="centerY" secondItem="kId-c2-rCX" secondAttribute="centerY" constant="78.5" id="1zi-b6-d4e"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="RMD-mc-I9y"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="cwP-bH-OZ6"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8ie-xW-0ye" secondAttribute="trailing" constant="8" id="iSb-1c-J5p"/>
                 <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="t7A-4p-IjZ"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
