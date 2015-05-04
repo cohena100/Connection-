@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AddressBookUI
+
 
 let MainTableViewControllerEstimatedRowHeight = 43.0
 
@@ -55,6 +57,15 @@ class MainTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    // MARK: Address Book
+
+    func showAddressBookForInvitation() {
+        let picker = ABPeoplePickerNavigationController()
+        picker.peoplePickerDelegate = self
+        picker.displayedProperties = [Int(kABPersonPhoneProperty)];
+        picker.predicateForEnablingPerson = NSPredicate(format: "phoneNumbers.@count > 0")
+        presentViewController(picker, animated: false, completion: nil)
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -62,6 +73,15 @@ class MainTableViewController: UITableViewController {
 extension MainTableViewController: UITableViewDelegate {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if let cell = cell {
+            switch cell.tag {
+            case 0:
+                showAddressBookForInvitation()
+            default:
+                showAddressBookForInvitation()
+            }
+        }
     }
     
 }
@@ -75,11 +95,27 @@ extension MainTableViewController: UITableViewDataSource {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let index = indexPath.indexAtPosition(indexPath.length - 1)
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MainTableViewCell
-        cell.actionLabel.text = labels[indexPath.indexAtPosition(indexPath.length - 1)]
+        cell.actionLabel.text = labels[index]
         //not my bug: although defined in interface builder, when change preferred content size notification is received then font needs to be set again
         cell.actionLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        cell.tag = index
         return cell
     }
     
 }
+
+// MARK: - ABPeoplePickerNavigationControllerDelegate
+
+extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
+    
+    func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
+        peoplePicker.dismissViewControllerAnimated(false) {
+            
+        }
+    }
+    
+}
+
+
