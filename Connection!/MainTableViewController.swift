@@ -111,8 +111,9 @@ extension MainTableViewController: UITableViewDataSource {
 extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-        peoplePicker.dismissViewControllerAnimated(false) {
-            
+        peoplePicker.dismissViewControllerAnimated(false) { [weak self] in
+            let vc = self?.storyboard?.instantiateViewControllerWithIdentifier("ProgressViewController") as! ProgressViewController
+            self?.presentViewController(vc, animated: false, completion: nil)
         }
     }
     

@@ -40,7 +40,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="734-Gc-N0l">
                                             <rect key="frame" x="8" y="11" width="551" height="20"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -68,5 +68,76 @@
             </objects>
             <point key="canvasLocation" x="994" y="963"/>
         </scene>
+        <!--Progress View Controller-->
+        <scene sceneID="VaH-Zc-Trc">
+            <objects>
+                <viewController storyboardIdentifier="ProgressViewController" id="6QZ-dt-55f" customClass="ProgressViewController" customModule="Connection_" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hif-FZ-lub"/>
+                        <viewControllerLayoutGuide type="bottom" id="cLT-ko-HSb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kfI-pE-7OH">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Yosemite" translatesAutoresizingMaskIntoConstraints="NO" id="EWq-qX-yvX">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aL5-HW-MbC">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Dcz-4i-aC7">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="580"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xXw-rA-a2E">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="580"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="lX0-6L-b7O">
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="580"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lSb-9v-rud">
+                                                        <rect key="frame" x="282" y="271" width="37" height="37"/>
+                                                    </activityIndicatorView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="centerY" secondItem="lSb-9v-rud" secondAttribute="centerY" id="cEZ-Yd-Uto"/>
+                                                    <constraint firstAttribute="centerX" secondItem="lSb-9v-rud" secondAttribute="centerX" id="gN7-V4-b7f"/>
+                                                </constraints>
+                                            </view>
+                                            <vibrancyEffect>
+                                                <blurEffect style="light"/>
+                                            </vibrancyEffect>
+                                        </visualEffectView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="xXw-rA-a2E" secondAttribute="trailing" id="3Zh-q2-LN8"/>
+                                        <constraint firstItem="xXw-rA-a2E" firstAttribute="top" secondItem="Dcz-4i-aC7" secondAttribute="top" id="9bj-mn-Rjy"/>
+                                        <constraint firstAttribute="bottom" secondItem="xXw-rA-a2E" secondAttribute="bottom" id="DtR-li-2Nx"/>
+                                        <constraint firstItem="xXw-rA-a2E" firstAttribute="leading" secondItem="Dcz-4i-aC7" secondAttribute="leading" id="oYB-Eh-COk"/>
+                                    </constraints>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="aL5-HW-MbC" secondAttribute="trailing" id="7Lk-XX-UCS"/>
+                            <constraint firstItem="aL5-HW-MbC" firstAttribute="leading" secondItem="kfI-pE-7OH" secondAttribute="leading" id="L3O-lU-qxL"/>
+                            <constraint firstAttribute="trailing" secondItem="EWq-qX-yvX" secondAttribute="trailing" id="OCT-GO-w9K"/>
+                            <constraint firstItem="EWq-qX-yvX" firstAttribute="leading" secondItem="kfI-pE-7OH" secondAttribute="leading" id="YNx-Ws-hAj"/>
+                            <constraint firstItem="cLT-ko-HSb" firstAttribute="top" secondItem="aL5-HW-MbC" secondAttribute="bottom" id="aBg-QX-DcX"/>
+                            <constraint firstItem="aL5-HW-MbC" firstAttribute="top" secondItem="hif-FZ-lub" secondAttribute="bottom" id="pZ9-bE-fbP"/>
+                            <constraint firstItem="cLT-ko-HSb" firstAttribute="top" secondItem="EWq-qX-yvX" secondAttribute="bottom" id="v3w-Rt-1Pp"/>
+                            <constraint firstItem="EWq-qX-yvX" firstAttribute="top" secondItem="hif-FZ-lub" secondAttribute="bottom" id="vY9-wY-qK8"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="85u-Il-7lz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1660" y="961"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="Yosemite" width="2709" height="1524"/>
+    </resources>
 </document>
