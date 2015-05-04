@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Parse
 
 let MainTableViewControllerEstimatedRowHeight = 43.0
 
