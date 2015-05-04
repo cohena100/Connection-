@@ -12,6 +12,8 @@ let MainTableViewControllerEstimatedRowHeight = 43.0
 
 class MainTableViewController: UITableViewController {
     
+    private let labels = [NSLocalizedString("Invite a contact from your address book by sms", comment: "tap here to invite a contact from your address book by sms")]
+    
     deinit {
         removeNotifications()
     }
@@ -67,13 +69,14 @@ extension MainTableViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 
 extension MainTableViewController: UITableViewDataSource {
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return labels.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MainTableViewCell
-        cell.actionLabel.text = NSLocalizedString("Invite a contact from your address book by sms", comment: "tap here to invite a contact from your address book by sms")
+        cell.actionLabel.text = labels[indexPath.indexAtPosition(indexPath.length - 1)]
         //not my bug: although defined in interface builder, when change preferred content size notification is received then font needs to be set again
         cell.actionLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
         return cell
