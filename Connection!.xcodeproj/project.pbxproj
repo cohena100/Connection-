@@ -57,9 +57,9 @@
 		041C84AA1AF5326300DA00A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		041C84AC1AF5327000DA00A0 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		041C84AE1AF5328000DA00A0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		041C84B01AF532C800DA00A0 /* Connection!-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connection!-Bridging-Header.h"; sourceTree = "<group>"; };
 		041C84B91AF534B000DA00A0 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		041C84BB1AF534B700DA00A0 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Connection!-Bridging-Header.h"; path = "Connection!/Connection!-Bridging-Header.h"; sourceTree = "<group>"; };
 		046428331AF4B9D2000EC419 /* Connection!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Connection!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		046428371AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		046428381AF4B9D2000EC419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,9 +132,9 @@
 			isa = PBXGroup;
 			children = (
 				046428351AF4B9D2000EC419 /* Connection! */,
+				045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */,
 				0464284B1AF4B9D2000EC419 /* Connection!Tests */,
 				046428341AF4B9D2000EC419 /* Products */,
-				041C84B01AF532C800DA00A0 /* Connection!-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -439,7 +439,7 @@
 				INFOPLIST_FILE = "Connection!/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Connection!-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Connection!/Connection!-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -458,7 +458,7 @@
 				INFOPLIST_FILE = "Connection!/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Connection!-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Connection!/Connection!-Bridging-Header.h";
 			};
 			name = Release;
 		};
