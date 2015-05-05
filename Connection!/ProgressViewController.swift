@@ -9,11 +9,15 @@
 import UIKit
 
 class ProgressViewController: UIViewController {
-
+    
+    @IBOutlet weak var snapshotView: UIView!
+    @IBOutlet weak var darkVisualEffectView: UIVisualEffectView!
+    
+    var snapshotViewContent: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        snapshotView.insertSubview(snapshotViewContent, belowSubview: darkVisualEffectView)
     }
 
     override func didReceiveMemoryWarning() {
