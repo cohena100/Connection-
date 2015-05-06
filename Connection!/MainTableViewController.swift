@@ -98,7 +98,7 @@ extension MainTableViewController: UITableViewDataSource {
         let index = indexPath.indexAtPosition(indexPath.length - 1)
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MainTableViewCell
         cell.actionLabel.text = labels[index]
-        //not my bug: although defined in interface builder, when change preferred content size notification is received then font needs to be set again
+        // not my bug: although defined in interface builder, when change preferred content size notification is received then font needs to be set again
         cell.actionLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
         cell.tag = index
         return cell
