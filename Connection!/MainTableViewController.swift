@@ -114,7 +114,15 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
         peoplePicker.dismissViewControllerAnimated(false) { [weak self] in
             let vc = self!.storyboard!.instantiateViewControllerWithIdentifier("ProgressViewController") as! ProgressViewController
             vc.snapshotViewContent = self!.view.snapshotViewAfterScreenUpdates(false)
-            self!.presentViewController(vc, animated: false, completion: nil)
+            self!.presentViewController(vc, animated: false) {
+                // not my bug: swift can't cast strait from CFString to String, so a casting from CFString to NSString is needed in the middle
+                let name: NSString = ABRecordCopyCompositeName(person).takeRetainedValue()
+                if(property == kABPersonPhoneProperty) {
+                    let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
+                    // not my bug: swift can't cast strait from CFString to String, so a casting from CFString to NSString is needed in the middle
+                    let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
+                }
+            }
         }
     }
     
