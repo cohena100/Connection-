@@ -23,6 +23,7 @@
 		041C84AF1AF5328000DA00A0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 041C84AE1AF5328000DA00A0 /* libsqlite3.dylib */; };
 		041C84BA1AF534B000DA00A0 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041C84B91AF534B000DA00A0 /* Accounts.framework */; };
 		041C84BC1AF534B700DA00A0 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041C84BB1AF534B700DA00A0 /* Social.framework */; };
+		0423FFD41AFA125100C22722 /* Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0423FFD31AFA125100C22722 /* Cloud.swift */; };
 		046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428381AF4B9D2000EC419 /* AppDelegate.swift */; };
 		0464283E1AF4B9D2000EC419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0464283C1AF4B9D2000EC419 /* Main.storyboard */; };
 		046428401AF4B9D2000EC419 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0464283F1AF4B9D2000EC419 /* Images.xcassets */; };
@@ -59,7 +60,8 @@
 		041C84AE1AF5328000DA00A0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		041C84B91AF534B000DA00A0 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		041C84BB1AF534B700DA00A0 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Connection!-Bridging-Header.h"; path = "Connection!/Connection!-Bridging-Header.h"; sourceTree = "<group>"; };
+		0423FFD31AFA125100C22722 /* Cloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cloud.swift; sourceTree = "<group>"; };
+		045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Connection!-Bridging-Header.h"; sourceTree = "<group>"; };
 		046428331AF4B9D2000EC419 /* Connection!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Connection!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		046428371AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		046428381AF4B9D2000EC419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,11 +130,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		0423FFD51AFA129400C22722 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				046428581AF4C160000EC419 /* MainTableViewController.swift */,
+				04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */,
+				04172FFA1AF79498006EE22F /* ProgressViewController.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		0423FFD61AFA12AB00C22722 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0423FFD31AFA125100C22722 /* Cloud.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		0464282A1AF4B9D2000EC419 = {
 			isa = PBXGroup;
 			children = (
 				046428351AF4B9D2000EC419 /* Connection! */,
-				045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */,
 				0464284B1AF4B9D2000EC419 /* Connection!Tests */,
 				046428341AF4B9D2000EC419 /* Products */,
 			);
@@ -150,15 +169,15 @@
 		046428351AF4B9D2000EC419 /* Connection! */ = {
 			isa = PBXGroup;
 			children = (
+				0423FFD51AFA129400C22722 /* UI */,
+				0423FFD61AFA12AB00C22722 /* Model */,
 				046428381AF4B9D2000EC419 /* AppDelegate.swift */,
-				046428581AF4C160000EC419 /* MainTableViewController.swift */,
-				04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */,
-				04172FFA1AF79498006EE22F /* ProgressViewController.swift */,
 				0464283C1AF4B9D2000EC419 /* Main.storyboard */,
 				0464283F1AF4B9D2000EC419 /* Images.xcassets */,
 				046428411AF4B9D2000EC419 /* LaunchScreen.xib */,
 				041C84BD1AF5394E00DA00A0 /* Frameworks */,
 				046428361AF4B9D2000EC419 /* Supporting Files */,
+				045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */,
 			);
 			path = "Connection!";
 			sourceTree = "<group>";
@@ -289,6 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0423FFD41AFA125100C22722 /* Cloud.swift in Sources */,
 				04172FFB1AF79498006EE22F /* ProgressViewController.swift in Sources */,
 				046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */,
 				04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */,
