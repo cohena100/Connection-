@@ -121,6 +121,13 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
                     // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
+                    Cloud.sharedInstance.invite(name: name as String, phone: phone as String,
+                        success: { (json) -> () in
+                        },
+                        fail: { (error) -> () in
+                            
+                        }
+                    )
                 }
             }
         }

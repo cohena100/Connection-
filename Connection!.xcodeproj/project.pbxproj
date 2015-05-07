@@ -30,6 +30,9 @@
 		046428431AF4B9D2000EC419 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 046428411AF4B9D2000EC419 /* LaunchScreen.xib */; };
 		0464284F1AF4B9D2000EC419 /* Connection_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */; };
 		046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428581AF4C160000EC419 /* MainTableViewController.swift */; };
+		049669451AFBA3AA007239BF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049669441AFBA3AA007239BF /* JSON.swift */; };
+		049669491AFBAE33007239BF /* ParseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049669481AFBAE33007239BF /* ParseWrapper.swift */; };
+		0496694B1AFBB2E9007239BF /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0496694A1AFBB2E9007239BF /* Log.swift */; };
 		04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +75,9 @@
 		0464284D1AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection_Tests.swift; sourceTree = "<group>"; };
 		046428581AF4C160000EC419 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		049669441AFBA3AA007239BF /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		049669481AFBAE33007239BF /* ParseWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseWrapper.swift; sourceTree = "<group>"; };
+		0496694A1AFBB2E9007239BF /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,9 +139,8 @@
 		0423FFD51AFA129400C22722 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				046428581AF4C160000EC419 /* MainTableViewController.swift */,
-				04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */,
-				04172FFA1AF79498006EE22F /* ProgressViewController.swift */,
+				049669431AFB66D4007239BF /* VC */,
+				049669421AFB667A007239BF /* Cell */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -144,6 +149,9 @@
 			isa = PBXGroup;
 			children = (
 				0423FFD31AFA125100C22722 /* Cloud.swift */,
+				049669441AFBA3AA007239BF /* JSON.swift */,
+				049669481AFBAE33007239BF /* ParseWrapper.swift */,
+				0496694A1AFBB2E9007239BF /* Log.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -205,6 +213,23 @@
 				0464284D1AF4B9D2000EC419 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		049669421AFB667A007239BF /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		049669431AFB66D4007239BF /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				046428581AF4C160000EC419 /* MainTableViewController.swift */,
+				04172FFA1AF79498006EE22F /* ProgressViewController.swift */,
+			);
+			name = VC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,10 +334,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0423FFD41AFA125100C22722 /* Cloud.swift in Sources */,
+				049669491AFBAE33007239BF /* ParseWrapper.swift in Sources */,
 				04172FFB1AF79498006EE22F /* ProgressViewController.swift in Sources */,
 				046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */,
+				049669451AFBA3AA007239BF /* JSON.swift in Sources */,
 				04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */,
 				046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */,
+				0496694B1AFBB2E9007239BF /* Log.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

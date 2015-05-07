@@ -11,21 +11,19 @@ import Parse
 
 class Cloud {
     
-    func invite(name: String, phone: String, block: PFIdResultBlock?) {
-        if let currentUser = PFUser.currentUser() {
-            currentUser.saveInBackgroundWithBlock({ (saved, error) -> Void in
-                if (saved) {
-                    PFCloud.callFunctionInBackground("hello", withParameters: [:]) { (result, error) -> Void in
-                        if let error = error {
-                            println("fail with error: \(error)")
-                        } else if let result: AnyObject = result {
-                            println("success with result: \(result)")
-                        }
-                    }
-                }
-            })
-        }
-        
+    static let sharedInstance = Cloud()
+    let parse: ParseWrapper
+    
+    init (parse: ParseWrapper) {
+        self.parse = parse
+    }
+    
+    convenience init () {
+        self.init(parse: ParseWrapper())
+    }
+    
+    func invite(#name: String, phone: String, success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "invite", withParameters: ["name": name, "phone": phone], success: success, fail: fail)
     }
     
 }
