@@ -119,7 +119,7 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                 let name: NSString = ABRecordCopyCompositeName(person).takeRetainedValue()
                 if(property == kABPersonPhoneProperty) {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
-                    // not my bug: swift can't cast strait from CFString to String, so a casting from CFString to NSString is needed in the middle
+                    // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
                 }
             }
