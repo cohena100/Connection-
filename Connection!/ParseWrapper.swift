@@ -15,8 +15,12 @@ public class ParseWrapper {
         
     }
     
-    public func call(#function: String, withParameters parameters: [NSObject : AnyObject], success: (JSONValue) -> (), fail: (NSError) -> ()) {
-        Log.call("\(function), \(parameters)")
+    public func call(#function: String, withParameters parameters: [NSObject : AnyObject]?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        if let parameters = parameters {
+            Log.call("\(function), \(parameters)")
+        } else {
+            Log.call("\(function), with no parameters")
+        }
         if let currentUser = PFUser.currentUser() {
             currentUser.saveInBackgroundWithBlock({ (saved, error) -> Void in
                 if (saved) {

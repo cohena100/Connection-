@@ -14,7 +14,7 @@ class ParseWrapperMock: ParseWrapper {
     var json: JSONValue?
     var error: NSError?
     
-    override func call(#function: String, withParameters parameters: [NSObject : AnyObject], success: (JSONValue) -> (), fail: (NSError) -> ()) {
+    override func call(#function: String, withParameters parameters: [NSObject : AnyObject]?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
         if let json = self.json {
             success(json)
         } else if let error = self.error {

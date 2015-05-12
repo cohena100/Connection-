@@ -23,7 +23,7 @@ public class Cloud {
     }
     
     public func invite(#success: (JSONValue) -> (), fail: (NSError) -> ()) {
-        parse.call(function: "invite", withParameters: [:], success: success, fail: fail)
+        parse.call(function: "invite", withParameters: nil, success: success, fail: fail)
     }
     
 }
