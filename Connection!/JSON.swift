@@ -24,7 +24,7 @@
 
 import Foundation
 
-enum JSONValue {
+public enum JSONValue {
     
     case JSONObject(NSDictionary)
     case JSONArray(NSArray)
@@ -32,7 +32,7 @@ enum JSONValue {
     case JSONNumber(NSNumber)
     case JSONNull
     
-    var string: String? {
+    public var string: String? {
         switch self {
         case .JSONString(let value):
             return value
@@ -41,7 +41,7 @@ enum JSONValue {
         }
     }
     
-    var integer: Int? {
+    public var integer: Int? {
         switch self {
         case .JSONNumber(let value):
             return value.integerValue
@@ -50,7 +50,7 @@ enum JSONValue {
         }
     }
     
-    var double: Double? {
+    public var double: Double? {
         switch self {
         case .JSONNumber(let value):
             return value.doubleValue
@@ -59,7 +59,7 @@ enum JSONValue {
         }
     }
     
-    var bool: Bool? {
+    public var bool: Bool? {
         switch self {
         case .JSONNumber(let value):
             return value.boolValue
@@ -68,7 +68,7 @@ enum JSONValue {
         }
     }
     
-    subscript(i: Int) -> JSONValue? {
+    public subscript(i: Int) -> JSONValue? {
         get {
             switch self {
             case .JSONArray(let value):
@@ -79,7 +79,7 @@ enum JSONValue {
         }
     }
     
-    subscript(key: String) -> JSONValue? {
+    public subscript(key: String) -> JSONValue? {
         get {
             switch self {
             case .JSONObject(let value):
@@ -90,7 +90,7 @@ enum JSONValue {
         }
     }
     
-    static func fromObject(object: AnyObject) -> JSONValue? {
+    public static func fromObject(object: AnyObject) -> JSONValue? {
         switch object {
         case let value as NSString:
             return JSONValue.JSONString(value as String)
@@ -111,7 +111,7 @@ enum JSONValue {
 
 extension JSONValue: SequenceType {
     
-    func generate() -> GeneratorOf<JSONValue> {
+    public func generate() -> GeneratorOf<JSONValue> {
         var enumerator: NSEnumerator?
         switch self {
         case .JSONObject(let value):

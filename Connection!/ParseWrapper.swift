@@ -9,9 +9,13 @@
 import Foundation
 import Parse
 
-class ParseWrapper {
+public class ParseWrapper {
     
-    func call(#function: String, withParameters parameters: [NSObject : AnyObject], success: (JSONValue) -> (), fail: (NSError) -> ()) {
+    public init() {
+        
+    }
+    
+    public func call(#function: String, withParameters parameters: [NSObject : AnyObject], success: (JSONValue) -> (), fail: (NSError) -> ()) {
         Log.call("\(function), \(parameters)")
         if let currentUser = PFUser.currentUser() {
             currentUser.saveInBackgroundWithBlock({ (saved, error) -> Void in

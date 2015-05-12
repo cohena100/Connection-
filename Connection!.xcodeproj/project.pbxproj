@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0406206D1B00C8C7001E301F /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0406206B1B00C8C7001E301F /* Model.xcdatamodeld */; };
+		0406206F1B00CCCC001E301F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0406206E1B00CCCC001E301F /* CoreDataStack.swift */; };
 		04172FFB1AF79498006EE22F /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04172FFA1AF79498006EE22F /* ProgressViewController.swift */; };
 		041C84981AF531D100DA00A0 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041C84961AF531D100DA00A0 /* Bolts.framework */; };
 		041C84991AF531D100DA00A0 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041C84971AF531D100DA00A0 /* Parse.framework */; };
@@ -28,11 +30,15 @@
 		0464283E1AF4B9D2000EC419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0464283C1AF4B9D2000EC419 /* Main.storyboard */; };
 		046428401AF4B9D2000EC419 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0464283F1AF4B9D2000EC419 /* Images.xcassets */; };
 		046428431AF4B9D2000EC419 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 046428411AF4B9D2000EC419 /* LaunchScreen.xib */; };
-		0464284F1AF4B9D2000EC419 /* Connection_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */; };
 		046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428581AF4C160000EC419 /* MainTableViewController.swift */; };
+		046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */; };
+		046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */; };
+		046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */; };
 		049669451AFBA3AA007239BF /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049669441AFBA3AA007239BF /* JSON.swift */; };
 		049669491AFBAE33007239BF /* ParseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049669481AFBAE33007239BF /* ParseWrapper.swift */; };
 		0496694B1AFBB2E9007239BF /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0496694A1AFBB2E9007239BF /* Log.swift */; };
+		04AECC051AFDFB38004B35E7 /* Connections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AECC041AFDFB38004B35E7 /* Connections.swift */; };
+		04B58E041B01CC9700E43EC2 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B58E031B01CC9700E43EC2 /* Connection.swift */; };
 		04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +53,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0406206C1B00C8C7001E301F /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0406206E1B00CCCC001E301F /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		04172FFA1AF79498006EE22F /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		041C84961AF531D100DA00A0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		041C84971AF531D100DA00A0 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -73,11 +81,15 @@
 		046428421AF4B9D2000EC419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		046428481AF4B9D2000EC419 /* Connection!Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Connection!Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0464284D1AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection_Tests.swift; sourceTree = "<group>"; };
 		046428581AF4C160000EC419 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseWrapperMock.swift; sourceTree = "<group>"; };
+		046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackMock.swift; sourceTree = "<group>"; };
+		046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsTests.swift; sourceTree = "<group>"; };
 		049669441AFBA3AA007239BF /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		049669481AFBAE33007239BF /* ParseWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseWrapper.swift; sourceTree = "<group>"; };
 		0496694A1AFBB2E9007239BF /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		04AECC041AFDFB38004B35E7 /* Connections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connections.swift; sourceTree = "<group>"; };
+		04B58E031B01CC9700E43EC2 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		04C3815D1AF4E4360084F0B0 /* MainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -152,6 +164,8 @@
 				049669441AFBA3AA007239BF /* JSON.swift */,
 				049669481AFBAE33007239BF /* ParseWrapper.swift */,
 				0496694A1AFBB2E9007239BF /* Log.swift */,
+				04AECC041AFDFB38004B35E7 /* Connections.swift */,
+				04B58E031B01CC9700E43EC2 /* Connection.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -180,6 +194,8 @@
 				0423FFD51AFA129400C22722 /* UI */,
 				0423FFD61AFA12AB00C22722 /* Model */,
 				046428381AF4B9D2000EC419 /* AppDelegate.swift */,
+				0406206E1B00CCCC001E301F /* CoreDataStack.swift */,
+				0406206B1B00C8C7001E301F /* Model.xcdatamodeld */,
 				0464283C1AF4B9D2000EC419 /* Main.storyboard */,
 				0464283F1AF4B9D2000EC419 /* Images.xcassets */,
 				046428411AF4B9D2000EC419 /* LaunchScreen.xib */,
@@ -201,7 +217,9 @@
 		0464284B1AF4B9D2000EC419 /* Connection!Tests */ = {
 			isa = PBXGroup;
 			children = (
-				0464284E1AF4B9D2000EC419 /* Connection_Tests.swift */,
+				046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */,
+				046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */,
+				046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */,
 				0464284C1AF4B9D2000EC419 /* Supporting Files */,
 			);
 			path = "Connection!Tests";
@@ -336,10 +354,14 @@
 				0423FFD41AFA125100C22722 /* Cloud.swift in Sources */,
 				049669491AFBAE33007239BF /* ParseWrapper.swift in Sources */,
 				04172FFB1AF79498006EE22F /* ProgressViewController.swift in Sources */,
+				0406206F1B00CCCC001E301F /* CoreDataStack.swift in Sources */,
 				046428591AF4C160000EC419 /* MainTableViewController.swift in Sources */,
+				04AECC051AFDFB38004B35E7 /* Connections.swift in Sources */,
 				049669451AFBA3AA007239BF /* JSON.swift in Sources */,
+				04B58E041B01CC9700E43EC2 /* Connection.swift in Sources */,
 				04C3815E1AF4E4360084F0B0 /* MainTableViewCell.swift in Sources */,
 				046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */,
+				0406206D1B00C8C7001E301F /* Model.xcdatamodeld in Sources */,
 				0496694B1AFBB2E9007239BF /* Log.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,7 +370,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0464284F1AF4B9D2000EC419 /* Connection_Tests.swift in Sources */,
+				046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */,
+				046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */,
+				046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,6 +597,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0406206B1B00C8C7001E301F /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0406206C1B00C8C7001E301F /* Model.xcdatamodel */,
+			);
+			currentVersion = 0406206C1B00C8C7001E301F /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0464282B1AF4B9D2000EC419 /* Project object */;
 }

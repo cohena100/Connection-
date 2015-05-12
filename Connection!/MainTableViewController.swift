@@ -8,7 +8,7 @@
 
 import UIKit
 import AddressBookUI
-
+import MessageUI
 
 let MainTableViewControllerEstimatedRowHeight = 43.0
 
@@ -66,6 +66,41 @@ class MainTableViewController: UITableViewController {
         picker.predicateForEnablingPerson = NSPredicate(format: "phoneNumbers.@count > 0")
         presentViewController(picker, animated: false, completion: nil)
     }
+    
+    // MARK: SMS
+    
+    func sendInvitation(connection: Connection) {
+        #if (arch(i386) || arch(x86_64)) && os(iOS)
+            let title = "Simulator"
+            let message = "sending SMS success or fail?"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            var actionTitle = "Success"
+            alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default){ action -> Void in
+                })
+            actionTitle = "Fail"
+            alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default){ action -> Void in
+                })
+            self.presentViewController(alert, animated: true, completion: nil)
+            #else
+            if MFMessageComposeViewController.canSendText() {
+            let messageVC = MFMessageComposeViewController()
+            messageVC.messageComposeDelegate = self
+            messageVC.recipients = [connection.phone]
+            let bodyFormat = NSLocalizedString("Please accept my invitation by entering in Connection!: %@", comment: "Please accept my invitation by entering in Connection!: {verification numbers}")
+            messageVC.body = NSString(format: bodyFormat, connection.vn) as String
+            self.presentViewController(messageVC, animated: true, completion: nil)
+            }
+            else {
+            Log.fail("Can't send the message since the user hasn't setup the Messages app yet.")
+            let title = NSLocalizedString("Message Composing", comment:"An alert title called: Message Composing ")
+            let message = NSLocalizedString("Please setup the Messages app and try again.", comment:"Please setup the Messages app and try again.")
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            let actionTitle = NSLocalizedString("OK", comment: "OK")
+            alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            }
+        #endif
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -121,11 +156,20 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
                     // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
-                    Cloud.sharedInstance.invite(name: name as String, phone: phone as String,
-                        success: { (json) -> () in
+                    Cloud.sharedInstance.invite(
+                        success: { [weak self] (json) in
+                            if let vn = json[Connection.Fields.Vn.rawValue]?.string, let cid = json[Connection.Fields.Cid.rawValue]?.string {
+                                let connection = Connections.sharedInstance.addConnection(cid: cid, name: name as String, phone: phone as String, vn: vn)
+                                self!.sendInvitation(connection)
+                            } else {
+                                Log.fail("not all objects are in the json response")
+                            }
                         },
-                        fail: { (error) -> () in
-                            
+                        fail: { [weak self] (error) in
+                            let alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
+                            let actionTitle = NSLocalizedString("OK", comment: "OK")
+                            alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default, handler: nil))
+                            self!.presentViewController(alert, animated: true, completion: nil)
                         }
                     )
                 }
@@ -135,4 +179,16 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
     
 }
 
-
+extension MainTableViewController: MFMessageComposeViewControllerDelegate {
+ 
+    func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+        switch result.value {
+        case MessageComposeResultSent.value :
+            println("")
+        default:
+            println("")
+        }
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+}

@@ -8,25 +8,25 @@
 
 import Foundation
 
-class Log {
+public class Log {
     
-    static func call(message: String) {
+    public static func call(message: String) {
         log("call: " + message)
     }
     
-    static func success(message: String) {
+    public static func success(message: String) {
         log("success: " + message)
     }
     
-    static func fail(error: NSError) {
+    public static func fail(error: NSError) {
         log("fail with error: \(error)")
     }
     
-    static func fail(message: String) {
+    public static func fail(message: String) {
         log("fail: " + message)
     }
     
-    static func log(logMessage: String, fileName: String = __FILE__, functionName: String = __FUNCTION__) {
+    private static func log(logMessage: String, fileName: String = __FILE__, functionName: String = __FUNCTION__) {
         println("[\(fileName)][\(functionName)][\(logMessage)]")
     }
 }

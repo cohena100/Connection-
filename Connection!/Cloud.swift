@@ -9,12 +9,12 @@
 import Foundation
 import Parse
 
-class Cloud {
+public class Cloud {
     
     static let sharedInstance = Cloud()
     let parse: ParseWrapper
     
-    init (parse: ParseWrapper) {
+    public init (parse: ParseWrapper) {
         self.parse = parse
     }
     
@@ -22,8 +22,8 @@ class Cloud {
         self.init(parse: ParseWrapper())
     }
     
-    func invite(#name: String, phone: String, success: (JSONValue) -> (), fail: (NSError) -> ()) {
-        parse.call(function: "invite", withParameters: ["name": name, "phone": phone], success: success, fail: fail)
+    public func invite(#success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "invite", withParameters: [:], success: success, fail: fail)
     }
     
 }
