@@ -13,19 +13,32 @@ public class Connections {
    
     static let sharedInstance = Connections()
     let coreDataStack: CoreDataStack
+    let cloud: Cloud
     
-    public init(coreDataStack: CoreDataStack) {
+    public init(coreDataStack: CoreDataStack, cloud: Cloud) {
         self.coreDataStack = coreDataStack
+        self.cloud = cloud
     }
     
     convenience init() {
-        self.init(coreDataStack: CoreDataStack.sharedInstance)
+        self.init(coreDataStack: CoreDataStack.sharedInstance, cloud: Cloud.sharedInstance)
     }
     
-    public func addConnection(#cid: String, name: String, phone: String, vn: String) -> Connection {
-        let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: coreDataStack.mainContext)
-        coreDataStack.saveContext(coreDataStack.mainContext!)
-        return connection
+    public func addConnection(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
+        cloud.invite(
+            success: { [weak self] (json) in
+                if let vn = json[Connection.Fields.Vn.rawValue]?.string, let cid = json[Connection.Fields.Cid.rawValue]?.string {
+                    let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext)
+                    self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                    success(connection)
+                } else {
+                    Log.fail("not all objects are in the json response")
+                }
+            },
+            fail: { [weak self] (error) in
+                fail(error)
+            }
+        )
     }
     
     public func connections() -> [Connection] {
