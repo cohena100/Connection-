@@ -33,6 +33,12 @@ public class Connections {
                     success(connection)
                 } else {
                     Log.fail("not all objects are in the json response")
+                    let description = NSLocalizedString("Can't add connection.", comment: "Can't add connection to the circle of connections.")
+                    let reason = NSLocalizedString("Got an incorrect response from the server.", comment: "Got an incorrect response from the server.")
+                    let recovery = NSLocalizedString("Please try again later.", comment: "Please try the last operation again later.")
+                    let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason, NSLocalizedRecoverySuggestionErrorKey: recovery]
+                    let error = NSError(domain: Cloud.Error.domain, code: Cloud.Error.code, userInfo: userInfo)
+                    fail(error)
                 }
             },
             fail: { [weak self] (error) in

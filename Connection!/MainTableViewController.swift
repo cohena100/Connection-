@@ -163,8 +163,8 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                         },
                         fail: { [weak self] (error) -> () in
                             let alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
-                            let actionTitle = NSLocalizedString("OK", comment: "OK")
-                            alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default, handler: nil))
+                            let title = NSLocalizedString("OK", comment: "OK")
+                            alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
                             self!.presentViewController(alert, animated: true, completion: nil)
                     })
                 }

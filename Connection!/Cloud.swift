@@ -9,7 +9,13 @@
 import Foundation
 import Parse
 
+
 public class Cloud {
+    
+    struct Error {
+        static let domain = "Connection!CloudDomain"
+        static let code = -52000
+    }
     
     static let sharedInstance = Cloud()
     let parse: ParseWrapper
