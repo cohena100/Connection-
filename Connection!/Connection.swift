@@ -9,10 +9,6 @@
 import Foundation
 import CoreData
 
-public func ==(lhs: Connection, rhs: Connection) -> Bool {
-    return lhs.cid == rhs.cid
-}
-
 public class Connection: NSManagedObject {
 
     enum Fields: String {
@@ -36,16 +32,6 @@ public class Connection: NSManagedObject {
         self.phone = phone
         self.vn = vn
         self.created = NSDate()
-    }
-    
-}
-
-extension Connection: Hashable {
-    
-    public override var hashValue: Int {
-        get {
-            return cid.hashValue
-        }
     }
     
 }
