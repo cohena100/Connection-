@@ -25,6 +25,7 @@ public class Connections {
     }
     
     public func addConnection(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
+        Log.call("with name: \(name) and phone: \(phone)")
         cloud.invite(
             success: { [weak self] (json) in
                 if let vn = json[Connection.Fields.Vn.rawValue]?.string, let cid = json[Connection.Fields.Cid.rawValue]?.string {
@@ -48,15 +49,51 @@ public class Connections {
     }
     
     public func connections() -> [Connection] {
+        Log.call("")
         let fetchRequest = NSFetchRequest(entityName:"Connection")
         var error: NSError?
         if let results = coreDataStack.mainContext!.executeFetchRequest(fetchRequest, error: &error) as? [Connection] {
             return results
         }
         if let error = error {
-            Log.fail("Could not fetch \(error), \(error.userInfo)")
+            Log.fail("Could not fetch connections with error: \(error)")
         }
         return []
+    }
+    
+    public func deleteLastConnection(#success: () -> (), fail: (NSError) -> ()) {
+        Log.call("")
+        let request = NSFetchRequest(entityName: "Connection")
+        request.resultType = .DictionaryResultType
+        let keyPathExpression = NSExpression(forKeyPath:"created")
+        let maxCreatedExpression = NSExpression(forFunction:"max:", arguments: [keyPathExpression])
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = "maxCreated"
+        expressionDescription.expression = maxCreatedExpression
+        expressionDescription.expressionResultType = .DateAttributeType
+        request.propertiesToFetch = [expressionDescription]
+        var error: NSError?
+        let results = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as! [NSDictionary]?
+        if let results = results {
+            if results.count > 0 {
+                precondition(results.count == 1, "there should be only one result with max date")
+                let result = results[0]
+                if let maxCreated = result["maxCreated"] as? NSDate {
+                    
+                } else {
+                    Log.fail("maxCreated created should have been in the result dictionary")
+                }
+            } else {
+                Log.fail("it appears that there are no connections at all")
+            }
+        } else {
+            Log.fail("Could not fetch last connection with error: \(error)")
+        }
+    }
+    
+    private func deleteConnection(connection: Connection) {
+        coreDataStack.mainContext!.deleteObject(connection)
+        coreDataStack.saveContext(coreDataStack.mainContext!)
     }
     
 }

@@ -15,6 +15,7 @@ let MainTableViewControllerEstimatedRowHeight = 43.0
 class MainTableViewController: UITableViewController {
     
     private let labels = [NSLocalizedString("Invite a contact from your address book by sms", comment: "tap here to invite a contact from your address book by sms")]
+    private let connections = Connections.sharedInstance
     
     deinit {
         removeNotifications()
@@ -78,7 +79,8 @@ class MainTableViewController: UITableViewController {
             var action = UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default, handler: nil)
             alert.addAction(action)
             actionTitle = "Fail"
-            action = UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default){ action -> Void in
+            action = UIAlertAction(title: actionTitle, style: UIAlertActionStyle.Default){ [weak self] action -> Void in
+                self!.deleteLastConnection()
             }
             alert.addAction(action)
             self.presentViewController(alert, animated: true, completion: nil)
@@ -93,6 +95,7 @@ class MainTableViewController: UITableViewController {
             }
             else {
                 Log.fail("Can't send the message since the user hasn't setup the Messages app yet.")
+                deleteLastConnection()
                 let title = NSLocalizedString("Message Composing", comment:"An alert title called: Message Composing ")
                 let message = NSLocalizedString("Please setup the Messages app and try again.", comment:"Please setup the Messages app and try again.")
                 let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -102,6 +105,18 @@ class MainTableViewController: UITableViewController {
             }
         #endif
     }
+    
+    // MARK: Connections
+    
+    func deleteLastConnection() {
+        connections.deleteLastConnection(
+            success: { () -> () in
+            },
+            fail: { (error) -> () in
+        })
+        
+    }
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -157,7 +172,7 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
                     // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
-                    Connections.sharedInstance.addConnection(name: name as String, phone: phone as String,
+                    self!.connections.addConnection(name: name as String, phone: phone as String,
                         success: { [weak self] (connection) -> () in
                             self!.sendInvitation(connection)
                         },
@@ -178,10 +193,17 @@ extension MainTableViewController: MFMessageComposeViewControllerDelegate {
  
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
         switch result.value {
-        case MessageComposeResultSent.value :
-            println("")
+        case MessageComposeResultSent.value:
+            Log.success("SMS message was sent successfuly")
+        case MessageComposeResultCancelled.value:
+            Log.fail("SMS message was cancelled")
+            deleteLastConnection()
+        case MessageComposeResultFailed.value:
+            Log.fail("SMS message sent failed")
+            deleteLastConnection()
         default:
-            println("")
+            Log.fail("SMS message result is \(result.value)")
+            deleteLastConnection()
         }
         dismissViewControllerAnimated(true, completion: nil)
     }
