@@ -110,7 +110,7 @@ class MainTableViewController: UITableViewController {
     
     func deleteLastConnection() {
         connections.deleteLastConnection(
-            success: { () -> () in
+            success: { (connection) -> () in
             },
             fail: { (error) -> () in
         })

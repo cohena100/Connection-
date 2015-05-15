@@ -24,7 +24,7 @@ public class Connection: NSManagedObject {
     @NSManaged public var vn: String
     @NSManaged public var created: NSDate
 
-    convenience init(cid: String, name: String, phone: String, vn: String, insertIntoManagedObjectContext context: NSManagedObjectContext!) {
+    convenience init(cid: String, name: String, phone: String, vn: String, insertIntoManagedObjectContext context: NSManagedObjectContext) {
         let entity = NSEntityDescription.entityForName("Connection", inManagedObjectContext: context)!
         self.init(entity: entity, insertIntoManagedObjectContext: context)
         self.cid = cid

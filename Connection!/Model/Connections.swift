@@ -29,7 +29,7 @@ public class Connections {
         cloud.invite(
             success: { [weak self] (json) in
                 if let vn = json[Connection.Fields.Vn.rawValue]?.string, let cid = json[Connection.Fields.Cid.rawValue]?.string {
-                    let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext)
+                    let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext!)
                     self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
                     success(connection)
                 } else {
@@ -61,39 +61,51 @@ public class Connections {
         return []
     }
     
-    public func deleteLastConnection(#success: () -> (), fail: (NSError) -> ()) {
+    public func deleteLastConnection(#success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call("")
         let request = NSFetchRequest(entityName: "Connection")
-        request.resultType = .DictionaryResultType
-        let keyPathExpression = NSExpression(forKeyPath:"created")
-        let maxCreatedExpression = NSExpression(forFunction:"max:", arguments: [keyPathExpression])
-        let expressionDescription = NSExpressionDescription()
-        expressionDescription.name = "maxCreated"
-        expressionDescription.expression = maxCreatedExpression
-        expressionDescription.expressionResultType = .DateAttributeType
-        request.propertiesToFetch = [expressionDescription]
+        let sortDescriptor = NSSortDescriptor(key: "created", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        request.fetchLimit = 1
         var error: NSError?
-        let results = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as! [NSDictionary]?
-        if let results = results {
-            if results.count > 0 {
-                precondition(results.count == 1, "there should be only one result with max date")
-                let result = results[0]
-                if let maxCreated = result["maxCreated"] as? NSDate {
-                    
-                } else {
-                    Log.fail("maxCreated created should have been in the result dictionary")
-                }
-            } else {
-                Log.fail("it appears that there are no connections at all")
-            }
+        let connections = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as? [Connection]
+        if let connections = connections {
         } else {
-            Log.fail("Could not fetch last connection with error: \(error)")
+            Log.fail("fetching last added contact ended with error: \(error)")
+            fail(error!)
+            return
+        }
+        let description = NSLocalizedString("Can't delete connection.", comment: "Can't delete connection from the circle of connections.")
+        let reason = NSLocalizedString("Got an internal error.", comment: "Got an internal error.")
+        let recovery = NSLocalizedString("Please try again later.", comment: "Please try the last operation again later.")
+        let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason, NSLocalizedRecoverySuggestionErrorKey: recovery]
+        error = NSError(domain: Cloud.Error.domain, code: Cloud.Error.code, userInfo: userInfo)
+        if connections!.count > 0 {
+        } else {
+            Log.warn("it appears that there are no connections at all")
+            fail(error!)
+            return
+        }
+        let connection = connections![0]
+        deleteConnection(connection, success: { (connection) -> () in
+            success(connection)
+        }) { (error) -> () in
+            fail(error)
         }
     }
     
-    private func deleteConnection(connection: Connection) {
-        coreDataStack.mainContext!.deleteObject(connection)
-        coreDataStack.saveContext(coreDataStack.mainContext!)
+    private func deleteConnection(connection: Connection, success: (Connection) -> (), fail: (NSError) -> ()) {
+        Log.call("")
+        cloud.deleteConnection(
+            success: { [weak self] (json) in
+                self!.coreDataStack.mainContext!.deleteObject(connection)
+                self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                success(connection)
+            },
+            fail: { [weak self] (error) in
+                fail(error)
+            }
+        )
     }
     
 }

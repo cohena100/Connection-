@@ -218,9 +218,9 @@
 			isa = PBXGroup;
 			children = (
 				046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */,
+				0464284C1AF4B9D2000EC419 /* Supporting Files */,
 				046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */,
 				046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */,
-				0464284C1AF4B9D2000EC419 /* Supporting Files */,
 			);
 			path = "Connection!Tests";
 			sourceTree = "<group>";

@@ -32,4 +32,8 @@ public class Cloud {
         parse.call(function: "invite", withParameters: nil, success: success, fail: fail)
     }
     
+    public func deleteConnection(#success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "deleteConnection", withParameters: nil, success: success, fail: fail)
+    }
+    
 }

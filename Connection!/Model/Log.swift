@@ -26,6 +26,10 @@ public class Log {
         log("fail: " + message)
     }
     
+    public static func warn(message: String) {
+        log("warn: " + message)
+    }
+    
     private static func log(logMessage: String, fileName: String = __FILE__, functionName: String = __FUNCTION__) {
         println("[\(fileName)][\(functionName)][\(logMessage)]")
     }

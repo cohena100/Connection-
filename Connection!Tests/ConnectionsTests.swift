@@ -20,6 +20,11 @@ let phone2 = "phone2"
 let vn2 = "vn2"
 let cid2 = "cid2"
 
+let name3 = "name3"
+let phone3 = "phone3"
+let vn3 = "vn3"
+let cid3 = "cid3"
+
 class ConnectionsTests: XCTestCase {
 
     
@@ -41,24 +46,19 @@ class ConnectionsTests: XCTestCase {
         parseWrapper = nil
     }
 
-    func testExample() {
-        XCTAssert(true, "Pass")
-    }
-
     func testInvite_invite1Connection_invited() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
         connections.addConnection(name: name1, phone: phone1,
-            success: { [weak self] (connection) -> () in
-                let connections = self!.connections.connections()
-                XCTAssertEqual(connections.count, 1, "there should be only one connection")
-                let connection = connections[0]
-                XCTAssertEqual(connection.cid, cid1, "cid should be cid1")
-                XCTAssertEqual(connection.name, name1, "name should be name1")
-                XCTAssertEqual(connection.phone, phone1, "phone should be phone1")
-                XCTAssertEqual(connection.vn, vn1, "vn should be vn1")
+            success: { (connection) -> () in
         }) { (error) -> () in
-            XCTAssertFalse(true, "this method should call should not end up with an error")
+            XCTAssert(false, "this method should call should not end up with an error")
         }
+        XCTAssertEqual(connections.connections().count, 1, "there should be only one connection")
+        let connection = connections.connections()[0]
+        XCTAssertEqual(connection.cid, cid1, "cid should be cid1")
+        XCTAssertEqual(connection.name, name1, "name should be name1")
+        XCTAssertEqual(connection.phone, phone1, "phone should be phone1")
+        XCTAssertEqual(connection.vn, vn1, "vn should be vn1")
     }
     
     func testInvite_invite2Connections_2invitedCounted() {
@@ -67,14 +67,14 @@ class ConnectionsTests: XCTestCase {
             success: { [weak self] (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
         connections.addConnection(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         let allConnections = connections.connections()
         XCTAssertEqual(allConnections.count, 2, "there should be only 2 connections")
@@ -94,27 +94,134 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssertFalse(true, "this method should call should not end up with an error")
+                XCTAssert(false, "this method should call should not end up with an error")
         })
         XCTAssertEqual(connections.connections().count, 4, "there should be only 4 connections")
+    }
+    
+    func testInvite_invite1ConnectionButDeleteIt_deleted() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        XCTAssertEqual(connections.connections().count, 0, "there should be no connections")
+    }
+    
+    func testInvite_invite2ConnectionButDeleteTheLast_onlyLastIsDeleted() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.addConnection(name: name2, phone: phone2,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+        })
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        XCTAssertEqual(connections.connections().count, 1, "there should be no connections")
+        let connection = connections.connections()[0]
+        XCTAssertEqual(connection.cid, cid1, "cid should be cid1")
+    }
+    
+    func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.addConnection(name: name2, phone: phone2,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+        })
+        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
+        connections.addConnection(name: name3, phone: phone3,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+        })
+        parseWrapper.json = JSONValue.fromObject(["cid": cid3])
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+                XCTAssertEqual(connection.cid, cid3, "cid should be cid3")
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+    }
+    
+    func testInvite_invite1ConnectionButDeleteItAndThenDeleteLastAgain_returnError() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTAssert(false, "this method should call should not end up with an error")
+            }
+        )
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+                XCTAssert(false, "this method should call should not end up with success")
+            },
+            fail: { (error) -> () in
+                XCTAssert(true, "this method should call should not end up with success")
+            }
+        )
     }
     
 }

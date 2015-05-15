@@ -23,6 +23,15 @@ class CoreDataStackMock: CoreDataStack {
                 abort()
             }
             }()
+        self.mainContext = {
+            var mainContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+            mainContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+            return mainContext
+            }()
+    }
+    
+    override func saveContext(context: NSManagedObjectContext) {
     }
     
 }

@@ -28,7 +28,7 @@ public class CoreDataStack {
         return model
         }()
     
-    var applicationDocumentsDirectory: NSURL = {
+    lazy var applicationDocumentsDirectory: NSURL = {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count - 1] as! NSURL
         }()
@@ -72,7 +72,7 @@ public class CoreDataStack {
             saveDerivedContext(context)
             return
         }
-        context.performBlock() {
+        context.performBlock( {
             var error: NSError? = nil
             if !(context.obtainPermanentIDsForObjects(Array(context.insertedObjects), error: &error)) {
                 Log.fail("Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
@@ -81,7 +81,8 @@ public class CoreDataStack {
                 Log.fail("Unresolved core data error: \(error)")
                 abort()
             }
-        }
+            }
+        )
     }
     
     public func saveDerivedContext(context: NSManagedObjectContext) {
