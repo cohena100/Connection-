@@ -51,7 +51,7 @@ class ConnectionsTests: XCTestCase {
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
         }) { (error) -> () in
-            XCTAssert(false, "this method should call should not end up with an error")
+            XCTFail("this method should call should not end up with an error")
         }
         XCTAssertEqual(connections.connections().count, 1, "there should be only one connection")
         let connection = connections.connections()[0]
@@ -67,14 +67,14 @@ class ConnectionsTests: XCTestCase {
             success: { [weak self] (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
         connections.addConnection(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         let allConnections = connections.connections()
         XCTAssertEqual(allConnections.count, 2, "there should be only 2 connections")
@@ -94,25 +94,25 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         connections.addConnection(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         XCTAssertEqual(connections.connections().count, 4, "there should be only 4 connections")
     }
@@ -123,14 +123,14 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         connections.deleteLastConnection(
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         XCTAssertEqual(connections.connections().count, 0, "there should be no connections")
@@ -142,7 +142,7 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
@@ -150,13 +150,13 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         connections.deleteLastConnection(
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         XCTAssertEqual(connections.connections().count, 1, "there should be no connections")
@@ -170,7 +170,7 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
@@ -178,14 +178,14 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
         connections.addConnection(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["cid": cid3])
         connections.deleteLastConnection(
@@ -193,7 +193,7 @@ class ConnectionsTests: XCTestCase {
                 XCTAssertEqual(connection.cid, cid3, "cid should be cid3")
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
     }
@@ -204,19 +204,19 @@ class ConnectionsTests: XCTestCase {
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         connections.deleteLastConnection(
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
-                XCTAssert(false, "this method should call should not end up with an error")
+                XCTFail("this method should call should not end up with an error")
             }
         )
         connections.deleteLastConnection(
             success: { (connection) -> () in
-                XCTAssert(false, "this method should call should not end up with success")
+                XCTFail("this method should call should not end up with success")
             },
             fail: { (error) -> () in
                 XCTAssert(true, "this method should call should not end up with success")

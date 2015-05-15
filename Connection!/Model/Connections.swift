@@ -96,7 +96,7 @@ public class Connections {
     
     private func deleteConnection(connection: Connection, success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call("")
-        cloud.deleteConnection(
+        cloud.deleteConnection(connection,
             success: { [weak self] (json) in
                 self!.coreDataStack.mainContext!.deleteObject(connection)
                 self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
