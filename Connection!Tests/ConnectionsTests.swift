@@ -45,6 +45,8 @@ class ConnectionsTests: XCTestCase {
         parseWrapper = nil
     }
 
+    // MARK: Invite
+    
     func testInvite_invite1Connection_invited() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
         connections.addConnection(name: name1, phone: phone1,
@@ -115,6 +117,8 @@ class ConnectionsTests: XCTestCase {
         })
         XCTAssertEqual(connections.connections().count, 4, "there should be only 4 connections")
     }
+    
+    // MARK: Delete
     
     func testInvite_invite1ConnectionButDeleteIt_deleted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
@@ -222,5 +226,7 @@ class ConnectionsTests: XCTestCase {
             }
         )
     }
+    
+    // MARK: Invite Again
     
 }

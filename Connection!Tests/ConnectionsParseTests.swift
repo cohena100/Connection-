@@ -47,6 +47,8 @@ class ConnectionsParseTests: XCTestCase {
         parseWrapper = nil
     }
     
+    // MARK: Invite and Delete
+    
     func testInvite_invite1Connection_invited() {
         let expectation = expectationWithDescription("invite user")
         connections.addConnection(name: name1, phone: phone1,
