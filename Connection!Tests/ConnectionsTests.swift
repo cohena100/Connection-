@@ -10,23 +10,22 @@ import UIKit
 import XCTest
 import Connection_
 
-let name1 = "name1"
-let phone1 = "phone1"
-let vn1 = "vn1"
-let cid1 = "cid1"
-
-let name2 = "name2"
-let phone2 = "phone2"
-let vn2 = "vn2"
-let cid2 = "cid2"
-
-let name3 = "name3"
-let phone3 = "phone3"
-let vn3 = "vn3"
-let cid3 = "cid3"
-
 class ConnectionsTests: XCTestCase {
 
+    let name1 = "name1"
+    let phone1 = "phone1"
+    let vn1 = "vn1"
+    let cid1 = "cid1"
+    
+    let name2 = "name2"
+    let phone2 = "phone2"
+    let vn2 = "vn2"
+    let cid2 = "cid2"
+    
+    let name3 = "name3"
+    let phone3 = "phone3"
+    let vn3 = "vn3"
+    let cid3 = "cid3"
     
     var connections: Connections!
     var cloud: Cloud!
@@ -189,8 +188,8 @@ class ConnectionsTests: XCTestCase {
         })
         parseWrapper.json = JSONValue.fromObject(["cid": cid3])
         connections.deleteLastConnection(
-            success: { (connection) -> () in
-                XCTAssertEqual(connection.cid, cid3, "cid should be cid3")
+            success: { [weak self] (connection) -> () in
+                XCTAssertEqual(connection.cid, self!.cid3, "cid should be cid3")
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")

@@ -40,6 +40,7 @@
 		046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */; };
 		046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */; };
 		046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */; };
+		04D003881B073817006A27B6 /* ConnectionsParseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D003871B073817006A27B6 /* ConnectionsParseTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseWrapperMock.swift; sourceTree = "<group>"; };
 		046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackMock.swift; sourceTree = "<group>"; };
 		046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsTests.swift; sourceTree = "<group>"; };
+		04D003871B073817006A27B6 /* ConnectionsParseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsParseTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */,
+				04D003871B073817006A27B6 /* ConnectionsParseTests.swift */,
 				0464284C1AF4B9D2000EC419 /* Supporting Files */,
 				046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */,
 				046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */,
@@ -373,6 +376,7 @@
 				046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */,
 				046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */,
 				046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */,
+				04D003881B073817006A27B6 /* ConnectionsParseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
