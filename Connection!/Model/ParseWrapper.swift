@@ -31,7 +31,7 @@ public class ParseWrapper {
                             return
                         }
                         else if let result: AnyObject = result {
-                            Log.success("\(result)")
+                            Log.success("result: \(result)")
                             if let json = JSONValue.fromObject(result) {
                                 Log.success("got a json")
                                 success(json)
