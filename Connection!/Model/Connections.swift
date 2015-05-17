@@ -48,17 +48,23 @@ public class Connections {
         )
     }
     
-    public func connections() -> [Connection] {
+    public func connections(#success: ([Connection]) -> (), fail: (NSError) -> ()) {
         Log.call("")
         let fetchRequest = NSFetchRequest(entityName:"Connection")
         var error: NSError?
-        if let results = coreDataStack.mainContext!.executeFetchRequest(fetchRequest, error: &error) as? [Connection] {
-            return results
-        }
-        if let error = error {
+        let connections = coreDataStack.mainContext!.executeFetchRequest(fetchRequest, error: &error) as? [Connection]
+        if let connections = connections {
+        } else {
             Log.fail("Could not fetch connections with error: \(error)")
+            fail(error!)
+            return
         }
-        return []
+        cloud.connections(success: { [weak self] (json) -> () in
+            let syncedConnections = self!.syncConnections(connections: connections!, cloudConnectionsJSON: json)
+            success(syncedConnections)
+        }) { (error) -> () in
+            fail(error)
+        }
     }
     
     public func deleteLastConnection(#success: (Connection) -> (), fail: (NSError) -> ()) {
@@ -106,6 +112,18 @@ public class Connections {
                 fail(error)
             }
         )
+    }
+    
+    private func syncConnections(#connections: [Connection], cloudConnectionsJSON json: JSONValue) -> [Connection]{
+        let syncedConnections = connections.filter() {
+            for cid in json {
+                if $0.cid == cid.string {
+                    return true
+                }
+            }
+            return false
+        }
+        return syncedConnections
     }
     
 }

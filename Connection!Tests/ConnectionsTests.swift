@@ -54,12 +54,20 @@ class ConnectionsTests: XCTestCase {
         }) { (error) -> () in
             XCTFail("this method should call should not end up with an error")
         }
-        XCTAssertEqual(connections.connections().count, 1, "there should be only one connection")
-        let connection = connections.connections()[0]
-        XCTAssertEqual(connection.cid, cid1, "cid should be cid1")
-        XCTAssertEqual(connection.name, name1, "name should be name1")
-        XCTAssertEqual(connection.phone, phone1, "phone should be phone1")
-        XCTAssertEqual(connection.vn, vn1, "vn should be vn1")
+        parseWrapper.json = JSONValue.fromObject([cid1])
+        connections.connections(
+            success: { [weak self] connections in
+                let connection = connections[0]
+                XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
+                XCTAssertEqual(connection.name, self!.name1, "name should be name1")
+                XCTAssertEqual(connection.phone, self!.phone1, "phone should be phone1")
+                XCTAssertEqual(connection.vn, self!.vn1, "vn should be vn1")
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should not end up with an error")
+            }
+        )
+
     }
     
     func testInvite_invite2Connections_2invitedCounted() {
@@ -77,16 +85,20 @@ class ConnectionsTests: XCTestCase {
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
-        let allConnections = connections.connections()
-        XCTAssertEqual(allConnections.count, 2, "there should be only 2 connections")
-        var connection = allConnections[1]
-        if connection.cid == cid1 {
-            connection = allConnections[0]
+        parseWrapper.json = JSONValue.fromObject([cid1, cid2])
+        connections.connections(success: { [weak self] (connections) -> () in
+            XCTAssertEqual(connections.count, 2, "there should be only 2 connections")
+            var connection = connections[1]
+            if connection.cid == self!.cid1 {
+                connection = connections[0]
+            }
+            XCTAssertEqual(connection.cid, self!.cid2, "cid should be cid2")
+            XCTAssertEqual(connection.name, self!.name2, "name should be name2")
+            XCTAssertEqual(connection.phone, self!.phone2, "phone should be phone2")
+            XCTAssertEqual(connection.vn, self!.vn2, "vn should be vn2")
+        }) { (error) -> () in
+            
         }
-        XCTAssertEqual(connection.cid, cid2, "cid should be cid2")
-        XCTAssertEqual(connection.name, name2, "name should be name2")
-        XCTAssertEqual(connection.phone, phone2, "phone should be phone2")
-        XCTAssertEqual(connection.vn, vn2, "vn should be vn2")
     }
     
     func testInvite_inviteManyConnections_manyInvitedCounted() {
@@ -97,25 +109,26 @@ class ConnectionsTests: XCTestCase {
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
-        connections.addConnection(name: name1, phone: phone1,
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.addConnection(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
-        connections.addConnection(name: name1, phone: phone1,
+        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
+        connections.addConnection(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
-        connections.addConnection(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
+        parseWrapper.json = JSONValue.fromObject([cid1, cid2, cid3])
+        connections.connections(success: { [weak self] (connections) -> () in
+            XCTAssertEqual(connections.count, 3, "there should be only 4 connections")
+            }) { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
-        })
-        XCTAssertEqual(connections.connections().count, 4, "there should be only 4 connections")
+        }
     }
     
     // MARK: Delete
@@ -136,7 +149,12 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should call should not end up with an error")
             }
         )
-        XCTAssertEqual(connections.connections().count, 0, "there should be no connections")
+        parseWrapper.json = JSONValue.fromObject([])
+        connections.connections(success: { [weak self] (connections) -> () in
+            XCTAssertEqual(connections.count, 0, "there should be no connections")
+            }) { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        }
     }
     
     func testInvite_invite2ConnectionButDeleteTheLast_onlyLastIsDeleted() {
@@ -162,9 +180,14 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should call should not end up with an error")
             }
         )
-        XCTAssertEqual(connections.connections().count, 1, "there should be no connections")
-        let connection = connections.connections()[0]
-        XCTAssertEqual(connection.cid, cid1, "cid should be cid1")
+        parseWrapper.json = JSONValue.fromObject([cid1])
+        connections.connections(success: { [weak self] (connections) -> () in
+            XCTAssertEqual(connections.count, 1, "there should be one connection")
+            let connection = connections[0]
+            XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
+            }) { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        }
     }
     
     func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
@@ -227,6 +250,44 @@ class ConnectionsTests: XCTestCase {
         )
     }
     
-    // MARK: Invite Again
+    func testInvite_invite3ConnectionButDeleteTheLastAndThe2ndWasDeleted_onlyTheFirstConnectionExists() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+            }
+        )
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.addConnection(name: name2, phone: phone2,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        })
+        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
+        connections.addConnection(name: name3, phone: phone3,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        })
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+            }
+        )
+        parseWrapper.json = JSONValue.fromObject([cid1])
+        connections.connections(success: { [weak self] (connections) -> () in
+            XCTAssertEqual(connections.count, 1, "there should be one connection")
+            let connection = connections[0]
+            XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
+            }) { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        }
+    }
     
 }

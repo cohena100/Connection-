@@ -36,4 +36,8 @@ public class Cloud {
         parse.call(function: "deleteConnection", withParameters: ["cid": connection.cid], success: success, fail: fail)
     }
     
+    public func connections(#success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "connections", withParameters: nil, success: success, fail: fail)
+    }
+    
 }
