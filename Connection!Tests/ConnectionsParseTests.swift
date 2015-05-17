@@ -55,19 +55,112 @@ class ConnectionsParseTests: XCTestCase {
             success: { (connection) -> () in
                 expectation.fulfill()
             }) { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
+                XCTFail("this method hould not end up with an error")
         }
         waitForExpectationsWithTimeout(timeout) { [weak self] (error) in
-            let expectation = self!.expectationWithDescription("remove user")
-            self!.connections.deleteLastConnection(
+            if let error = error {
+                XCTFail("this method should not end up with an error")
+                return
+            }
+            let expectation = self!.expectationWithDescription("get connections")
+            self!.connections.connections(success: { (connections) -> () in
+                XCTAssertEqual(connections.count, 1, "there should be one connection")
+                expectation.fulfill()
+            }, fail: { (error) -> () in
+                
+            })
+            self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                if let error = error {
+                    XCTFail("this method should not end up with an error")
+                    return
+                }
+                let expectation = self!.expectationWithDescription("cleanup")
+                self!.connections.deleteLastConnection(
+                    success: { (connection) -> () in
+                        expectation.fulfill()
+                    },
+                    fail: { (error) -> () in
+                        XCTFail("this method should call should not end up with an error")
+                    }
+                )
+                self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                    if let error = error {
+                        XCTFail("this method should not end up with an error")
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
+    func testInvite_invite2Connections_2connections() {
+        let expectation = expectationWithDescription("invite user")
+        connections.addConnection(name: name1, phone: phone1,
+            success: { (connection) -> () in
+                expectation.fulfill()
+            }) { (error) -> () in
+                XCTFail("this method hould not end up with an error")
+        }
+        waitForExpectationsWithTimeout(timeout) { [weak self] (error) in
+            if let error = error {
+                XCTFail("this method should not end up with an error")
+                return
+            }
+            let expectation = self!.expectationWithDescription("invite another user")
+            self!.connections.addConnection(name: self!.name2, phone: self!.phone2,
                 success: { (connection) -> () in
                     expectation.fulfill()
-                },
-                fail: { (error) -> () in
-                    XCTFail("this method should call should not end up with an error")
-                }
-            )
+                }) { (error) -> () in
+                    XCTFail("this method hould not end up with an error")
+            }
             self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                if let error = error {
+                    XCTFail("this method should not end up with an error")
+                    return
+                }
+                let expectation = self!.expectationWithDescription("get connections")
+                self!.connections.connections(success: { (connections) -> () in
+                    XCTAssertEqual(connections.count, 2, "there should be 2 connections")
+                    expectation.fulfill()
+                    }, fail: { (error) -> () in
+                        
+                })
+                self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                    if let error = error {
+                        XCTFail("this method should not end up with an error")
+                        return
+                    }
+                    let expectation = self!.expectationWithDescription("cleanup")
+                    self!.connections.deleteLastConnection(
+                        success: { (connection) -> () in
+                            expectation.fulfill()
+                        },
+                        fail: { (error) -> () in
+                            XCTFail("this method should call should not end up with an error")
+                        }
+                    )
+                    self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                        if let error = error {
+                            XCTFail("this method should not end up with an error")
+                            return
+                        }
+                        let expectation = self!.expectationWithDescription("cleanup")
+                        self!.connections.deleteLastConnection(
+                            success: { (connection) -> () in
+                                expectation.fulfill()
+                            },
+                            fail: { (error) -> () in
+                                XCTFail("this method should call should not end up with an error")
+                            }
+                        )
+                        self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                            if let error = error {
+                                XCTFail("this method should not end up with an error")
+                                return
+                            }
+                        }
+                    }
+                }
             }
         }
     }
