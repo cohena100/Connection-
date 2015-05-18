@@ -49,7 +49,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite1Connection_invited() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
         }) { (error) -> () in
             XCTFail("this method should call should not end up with an error")
@@ -72,14 +72,14 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite2Connections_2invitedCounted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { [weak self] (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.addConnection(name: name2, phone: phone2,
+        connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -103,21 +103,21 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_inviteManyConnections_manyInvitedCounted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.addConnection(name: name2, phone: phone2,
+        connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.addConnection(name: name3, phone: phone3,
+        connections.invite(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -135,7 +135,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite1ConnectionButDeleteIt_deleted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -159,7 +159,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite2ConnectionButDeleteTheLast_onlyLastIsDeleted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -167,7 +167,7 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.addConnection(name: name2, phone: phone2,
+        connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -192,7 +192,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -200,14 +200,14 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.addConnection(name: name2, phone: phone2,
+        connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.addConnection(name: name3, phone: phone3,
+        connections.invite(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -226,7 +226,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite1ConnectionButDeleteItAndThenDeleteLastAgain_returnError() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -252,7 +252,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite3ConnectionButDeleteTheLastAndThe2ndWasDeleted_onlyTheFirstConnectionExists() {
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
@@ -260,14 +260,14 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.addConnection(name: name2, phone: phone2,
+        connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.addConnection(name: name3, phone: phone3,
+        connections.invite(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
             fail: { (error) -> () in

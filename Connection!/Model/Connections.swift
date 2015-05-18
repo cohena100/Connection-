@@ -24,7 +24,9 @@ public class Connections {
         self.init(coreDataStack: CoreDataStack.sharedInstance, cloud: Cloud.sharedInstance)
     }
     
-    public func addConnection(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
+    // MARK: Invite
+
+    public func invite(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call("with name: \(name) and phone: \(phone)")
         cloud.invite(
             success: { [weak self] (json) in
@@ -48,6 +50,8 @@ public class Connections {
         )
     }
     
+    // MARK: Get Connections
+    
     public func connections(#success: ([Connection]) -> (), fail: (NSError) -> ()) {
         Log.call("")
         let fetchRequest = NSFetchRequest(entityName:"Connection")
@@ -66,6 +70,8 @@ public class Connections {
             fail(error)
         }
     }
+    
+    // MARK: Delete Connections
     
     public func deleteLastConnection(#success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call("")
@@ -99,6 +105,8 @@ public class Connections {
             fail(error)
         }
     }
+    
+    // MARK: Private Methods
     
     private func deleteConnection(connection: Connection, success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call("")

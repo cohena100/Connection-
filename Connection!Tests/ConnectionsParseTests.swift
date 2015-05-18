@@ -51,7 +51,7 @@ class ConnectionsParseTests: XCTestCase {
     
     func testInvite_invite1Connection_invited() {
         let expectation = expectationWithDescription("invite user")
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
                 expectation.fulfill()
             }) { (error) -> () in
@@ -95,7 +95,7 @@ class ConnectionsParseTests: XCTestCase {
     
     func testInvite_invite2Connections_2connections() {
         let expectation = expectationWithDescription("invite user")
-        connections.addConnection(name: name1, phone: phone1,
+        connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
                 expectation.fulfill()
             }) { (error) -> () in
@@ -107,7 +107,7 @@ class ConnectionsParseTests: XCTestCase {
                 return
             }
             let expectation = self!.expectationWithDescription("invite another user")
-            self!.connections.addConnection(name: self!.name2, phone: self!.phone2,
+            self!.connections.invite(name: self!.name2, phone: self!.phone2,
                 success: { (connection) -> () in
                     expectation.fulfill()
                 }) { (error) -> () in

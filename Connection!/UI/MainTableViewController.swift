@@ -172,7 +172,7 @@ extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
                     // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
-                    self!.connections.addConnection(name: name as String, phone: phone as String,
+                    self!.connections.invite(name: name as String, phone: phone as String,
                         success: { [weak self] (connection) -> () in
                             self!.sendInvitation(connection)
                         },
