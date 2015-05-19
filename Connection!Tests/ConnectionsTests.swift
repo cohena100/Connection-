@@ -290,4 +290,36 @@ class ConnectionsTests: XCTestCase {
         }
     }
     
+    // MARK: Invite again
+    
+    func testInviteAgain_invite1ConnectionAndThenInviteTheSameoneAgain_only1Connection() {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.invite(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            }) { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        }
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid1])
+        connections.invite(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            }) { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        }
+        parseWrapper.json = JSONValue.fromObject([cid1])
+        connections.connections(
+            success: { [weak self] connections in
+                XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
+                let connection = connections[0]
+                XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
+                XCTAssertEqual(connection.name, self!.name1, "name should be name1")
+                XCTAssertEqual(connection.phone, self!.phone1, "phone should be phone1")
+                XCTAssertEqual(connection.vn, self!.vn2, "vn should be vn2")
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should not end up with an error")
+            }
+        )
+        
+    }
+    
 }

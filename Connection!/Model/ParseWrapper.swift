@@ -17,37 +17,37 @@ public class ParseWrapper {
     
     public func call(#function: String, withParameters parameters: [NSObject : AnyObject]?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
         if let parameters = parameters {
-            Log.call("\(function), \(parameters)")
+            Log.call(functionName: __FUNCTION__, message: "\(function), \(parameters)")
         } else {
-            Log.call("\(function), with no parameters")
+            Log.call(functionName: __FUNCTION__, message: "\(function), with no parameters")
         }
         if let currentUser = PFUser.currentUser() {
             currentUser.saveInBackgroundWithBlock({ (saved, error) -> Void in
                 if (saved) {
                     PFCloud.callFunctionInBackground(function, withParameters: parameters) { (result, error) -> Void in
                         if let error = error {
-                            Log.fail(error)
+                            Log.fail(functionName: __FUNCTION__, error: error)
                             fail(error)
                             return
                         }
                         else if let result: AnyObject = result {
-                            Log.success("result: \(result)")
+                            Log.success(functionName: __FUNCTION__, message: "result: \(result)")
                             if let json = JSONValue.fromObject(result) {
-                                Log.success("got a json")
+                                Log.success(functionName: __FUNCTION__, message: "got a json")
                                 success(json)
                             } else {
-                                Log.fail("create a json from result")
+                                Log.fail(functionName: __FUNCTION__, message: "create a json from result")
                             }
                         } else {
-                            Log.fail("get a known result type")
+                            Log.fail(functionName: __FUNCTION__, message: "get a known result type")
                         }
                     }
                 } else {
-                    Log.fail("save current user")
+                    Log.fail(functionName: __FUNCTION__, message: "save current user")
                 }
             })
         } else {
-            Log.fail("get current user")
+            Log.fail(functionName: __FUNCTION__, message: "get current user")
         }
     }
     

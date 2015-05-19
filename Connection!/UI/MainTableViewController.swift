@@ -94,7 +94,7 @@ class MainTableViewController: UITableViewController {
                 self.presentViewController(messageVC, animated: true, completion: nil)
             }
             else {
-                Log.fail("Can't send the message since the user hasn't setup the Messages app yet.")
+                Log.fail(fileName:__FILE__, functionName: __FUNCTION__, message: "Can't send the message since the user hasn't setup the Messages app yet.")
                 deleteLastConnection()
                 let title = NSLocalizedString("Message Composing", comment:"An alert title called: Message Composing ")
                 let message = NSLocalizedString("Please setup the Messages app and try again.", comment:"Please setup the Messages app and try again.")
@@ -194,15 +194,15 @@ extension MainTableViewController: MFMessageComposeViewControllerDelegate {
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
         switch result.value {
         case MessageComposeResultSent.value:
-            Log.success("SMS message was sent successfuly")
+            Log.success(functionName: __FUNCTION__, message: "SMS message was sent successfuly")
         case MessageComposeResultCancelled.value:
-            Log.fail("SMS message was cancelled")
+            Log.fail(functionName: __FUNCTION__, message: "SMS message was cancelled")
             deleteLastConnection()
         case MessageComposeResultFailed.value:
-            Log.fail("SMS message sent failed")
+            Log.fail(functionName: __FUNCTION__, message: "SMS message sent failed")
             deleteLastConnection()
         default:
-            Log.fail("SMS message result is \(result.value)")
+            Log.fail(functionName: __FUNCTION__, message: "SMS message result is \(result.value)")
             deleteLastConnection()
         }
         dismissViewControllerAnimated(true, completion: nil)

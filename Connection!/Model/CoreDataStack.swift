@@ -75,10 +75,10 @@ public class CoreDataStack {
         context.performBlock( {
             var error: NSError? = nil
             if !(context.obtainPermanentIDsForObjects(Array(context.insertedObjects), error: &error)) {
-                Log.fail("Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
+                Log.fail(functionName: __FUNCTION__, message: "Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
             }
             if !(context.save(&error)) {
-                Log.fail("Unresolved core data error: \(error)")
+                Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
                 abort()
             }
             }
@@ -89,10 +89,10 @@ public class CoreDataStack {
         context.performBlock() { [weak self] in
             var error: NSError? = nil
             if !(context.obtainPermanentIDsForObjects(Array(context.insertedObjects), error: &error)) {
-                Log.fail("Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
+                Log.fail(functionName: __FUNCTION__, message: "Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
             }
             if !(context.save(&error)) {
-                Log.fail("Unresolved core data error: \(error)")
+                Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
                 abort()
             }
             self!.saveContext(self!.mainContext!)

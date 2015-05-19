@@ -32,6 +32,10 @@ public class Cloud {
         parse.call(function: "invite", withParameters: nil, success: success, fail: fail)
     }
     
+    public func inviteAgain(#cid: String, success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "inviteAgain", withParameters: ["cid": cid], success: success, fail: fail)
+    }
+    
     public func deleteConnection(connection: Connection, success: (JSONValue) -> (), fail: (NSError) -> ()) {
         parse.call(function: "deleteConnection", withParameters: ["cid": connection.cid], success: success, fail: fail)
     }

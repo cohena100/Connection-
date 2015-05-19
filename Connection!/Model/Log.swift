@@ -10,27 +10,27 @@ import Foundation
 
 public class Log {
     
-    public static func call(message: String) {
-        log("call: " + message)
+    public static func call(#functionName: String, message: String) {
+        log(functionName: functionName, logMessage: "call: " + message)
     }
     
-    public static func success(message: String) {
-        log("success: " + message)
+    public static func success(#functionName: String, message: String) {
+        log(functionName: functionName, logMessage: "success: " + message)
     }
     
-    public static func fail(error: NSError) {
-        log("fail with error: \(error)")
+    public static func fail(#functionName: String, error: NSError) {
+        log(functionName: functionName, logMessage: "fail with error: \(error)")
     }
     
-    public static func fail(message: String) {
-        log("fail: " + message)
+    public static func fail(#functionName: String, message: String) {
+        log(functionName: functionName, logMessage: "fail: " + message)
     }
     
-    public static func warn(message: String) {
-        log("warn: " + message)
+    public static func warn(#functionName: String, message: String) {
+        log(functionName: functionName, logMessage: "warn: " + message)
     }
     
-    private static func log(logMessage: String, fileName: String = __FILE__, functionName: String = __FUNCTION__) {
-        println("[\(fileName)][\(functionName)][\(logMessage)]")
+    private static func log(#functionName: String, logMessage: String) {
+        println("[\(functionName)][\(logMessage)]")
     }
 }
