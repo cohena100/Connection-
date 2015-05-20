@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 public class Connections {
-
+    
     static let sharedInstance = Connections()
     let coreDataStack: CoreDataStack
     let cloud: Cloud
@@ -28,28 +28,11 @@ public class Connections {
     
     public func invite(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "with name: \(name) and phone: \(phone)")
-        if let connection = connection(phone: phone) {
+        if let connection = getConnection(phone: phone) {
             inviteAgain(connection: connection, success: success, fail: fail)
         } else {
             inviteNew(name: name, phone: phone, success: success, fail: fail)
         }
-    }
-    
-    private func connection(#phone: String) -> Connection? {
-        Log.call(functionName: __FUNCTION__, message: "with phone: \(phone)")
-        let request = NSFetchRequest(entityName:"Connection")
-        request.predicate =  NSPredicate(format: "%K LIKE %@", "phone", phone)
-        var error: NSError?
-        let connections = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as? [Connection]
-        if let connections = connections {
-        } else {
-            Log.fail(functionName: __FUNCTION__, message: "Could not fetch connections with error: \(error)")
-            return nil
-        }
-        if connections!.count == 0 {
-            return nil
-        }
-        return connections![0]
     }
     
     private func inviteNew(#name: String, phone: String, success: (Connection) -> (), fail: (NSError) -> ()) {
@@ -98,7 +81,7 @@ public class Connections {
     
     // MARK: Get Connections
     
-    public func connections(#success: ([Connection]) -> (), fail: (NSError) -> ()) {
+    public func getConnections(#success: ([Connection]) -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "")
         let fetchRequest = NSFetchRequest(entityName:"Connection")
         var error: NSError?
@@ -127,6 +110,23 @@ public class Connections {
             return false
         }
         return syncedConnections
+    }
+    
+    private func getConnection(#phone: String) -> Connection? {
+        Log.call(functionName: __FUNCTION__, message: "with phone: \(phone)")
+        let request = NSFetchRequest(entityName:"Connection")
+        request.predicate =  NSPredicate(format: "%K LIKE %@", "phone", phone)
+        var error: NSError?
+        let connections = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as? [Connection]
+        if let connections = connections {
+        } else {
+            Log.fail(functionName: __FUNCTION__, message: "Could not fetch connections with error: \(error)")
+            return nil
+        }
+        if connections!.count == 0 {
+            return nil
+        }
+        return connections![0]
     }
     
     // MARK: Delete Connections
@@ -171,11 +171,41 @@ public class Connections {
                 self!.coreDataStack.mainContext!.deleteObject(connection)
                 self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
                 success(connection)
-            },
-            fail: { [weak self] (error) in
+            }) { [weak self] (error) in
                 fail(error)
-            }
-        )
+        }
     }
     
+    // MARK: Accept Invitation
+    
+    public func acceptInvitation(#name: String, phone: String, vn: String, success: (Connection) -> (), fail: (NSError) -> ()) {
+        let cid: String?
+        let connection = getConnection(phone: phone)
+        if let connection = connection {
+            cid = connection.cid
+        } else {
+            cid = nil
+        }
+        cloud.acceptInvitation(vn: vn, cid: cid, success: { [weak self] (json) -> () in
+            if let vn = json[Connection.Fields.Vn.rawValue]?.string, cid = json[Connection.Fields.Cid.rawValue]?.string {
+                if let connection = connection {
+                    self!.coreDataStack.mainContext!.deleteObject(connection)
+                    self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                }
+                let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext!)
+                self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                success(connection)
+            } else {
+                Log.fail(functionName: __FUNCTION__, message: "not all objects are in the json response")
+                let description = NSLocalizedString("Can't accept invitation.", comment: "Can't accept an invitation.")
+                let reason = NSLocalizedString("Got an incorrect response from the server.", comment: "Got an incorrect response from the server.")
+                let recovery = NSLocalizedString("Please try again later.", comment: "Please try the last operation again later.")
+                let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason, NSLocalizedRecoverySuggestionErrorKey: recovery]
+                let error = NSError(domain: Cloud.Error.domain, code: Cloud.Error.code, userInfo: userInfo)
+                fail(error)
+            }
+            }) { (error) -> () in
+                fail(error)
+        }
+    }
 }

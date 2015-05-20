@@ -44,4 +44,14 @@ public class Cloud {
         parse.call(function: "connections", withParameters: nil, success: success, fail: fail)
     }
     
+    public func acceptInvitation(#vn: String, cid: String?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        let params: [NSObject : AnyObject]
+        if let cid = cid {
+            params = ["vn": vn, "cid": cid]
+        } else {
+            params = ["vn": vn]
+        }
+        parse.call(function: "acceptInvitation", withParameters: params, success: success, fail: fail)
+    }
+    
 }

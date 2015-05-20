@@ -55,7 +55,7 @@ class ConnectionsTests: XCTestCase {
             XCTFail("this method should call should not end up with an error")
         }
         parseWrapper.json = JSONValue.fromObject([cid1])
-        connections.connections(
+        connections.getConnections(
             success: { [weak self] connections in
                 let connection = connections[0]
                 XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
@@ -86,7 +86,7 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject([cid1, cid2])
-        connections.connections(success: { [weak self] (connections) -> () in
+        connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 2, "there should be only 2 connections")
             var connection = connections[1]
             if connection.cid == self!.cid1 {
@@ -124,7 +124,7 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should call should not end up with an error")
         })
         parseWrapper.json = JSONValue.fromObject([cid1, cid2, cid3])
-        connections.connections(success: { [weak self] (connections) -> () in
+        connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 3, "there should be only 4 connections")
             }) { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
@@ -150,7 +150,7 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject([])
-        connections.connections(success: { [weak self] (connections) -> () in
+        connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 0, "there should be no connections")
             }) { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
@@ -181,7 +181,7 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject([cid1])
-        connections.connections(success: { [weak self] (connections) -> () in
+        connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
             let connection = connections[0]
             XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
@@ -281,7 +281,7 @@ class ConnectionsTests: XCTestCase {
             }
         )
         parseWrapper.json = JSONValue.fromObject([cid1])
-        connections.connections(success: { [weak self] (connections) -> () in
+        connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
             let connection = connections[0]
             XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
@@ -306,7 +306,7 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should call should not end up with an error")
         }
         parseWrapper.json = JSONValue.fromObject([cid1])
-        connections.connections(
+        connections.getConnections(
             success: { [weak self] connections in
                 XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
                 let connection = connections[0]
@@ -319,7 +319,61 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should not end up with an error")
             }
         )
-        
     }
     
+    // MARK: Accept Invitation
+    
+    func testAcceptInvitation_acceptInvitation_has1Connection () {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.acceptInvitation(name: name1, phone: phone1, vn: vn1, success: { [weak self] (connection) -> () in
+            
+        }) { (error) -> () in
+            
+        }
+        parseWrapper.json = JSONValue.fromObject([cid1])
+        connections.getConnections(
+            success: { [weak self] connections in
+                XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
+                let connection = connections[0]
+                XCTAssertEqual(connection.cid, self!.cid1, "cid should be cid1")
+                XCTAssertEqual(connection.name, self!.name1, "name should be name1")
+                XCTAssertEqual(connection.phone, self!.phone1, "phone should be phone1")
+                XCTAssertEqual(connection.vn, self!.vn1, "vn should be vn1")
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should not end up with an error")
+            }
+        )
+    }
+
+    func testAcceptInvitation_acceptInvitationFromAnAreadyConnection_stillHas1Connection () {
+        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        connections.invite(name: name1, phone: phone1,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        })
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.acceptInvitation(name: name1, phone: phone1, vn: vn1, success: { [weak self] (connection) -> () in
+            
+            }) { (error) -> () in
+                
+        }
+        parseWrapper.json = JSONValue.fromObject([cid2])
+        connections.getConnections(
+            success: { [weak self] connections in
+                XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
+                let connection = connections[0]
+                XCTAssertEqual(connection.cid, self!.cid2, "cid is wrong")
+                XCTAssertEqual(connection.name, self!.name1, "name is wrong")
+                XCTAssertEqual(connection.phone, self!.phone1, "phone is wrong")
+                XCTAssertEqual(connection.vn, self!.vn2, "vn is wrong")
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should not end up with an error")
+            }
+        )
+    }
+
 }
