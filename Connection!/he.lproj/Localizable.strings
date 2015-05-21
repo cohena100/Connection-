@@ -1,0 +1,33 @@
+/* Can't accept an invitation. */
+"Can't accept invitation." = "לא יכול לאשר הזמנה.";
+
+/* Can't add connection to the circle of connections. */
+"Can't add connection." = "לא יכול להוסיף איש קשר.";
+
+/* Can't delete connection from the circle of connections. */
+"Can't delete connection." = "לא יכול למחוק איש קשר.";
+
+/* Got an incorrect response from the server. */
+"Got an incorrect response from the server." = "תשובה שגוייה הגיע מהשרת.";
+
+/* Got an internal error. */
+"Got an internal error." = "שגיעת פנים אירעה.";
+
+/* tap here to invite a contact from your address book by sms */
+"Invite a contact from your address book by sms" = "הזמן איש קשר ע״י שליחת הודעה";
+
+/* An alert title called: Message Composing */
+"Message Composing" = "עריכת הודעה";
+
+/* OK */
+"OK" = "אוקיי";
+
+/* Please accept my invitation by entering in Connection!: {verification digits} */
+"Please accept my invitation by entering in Connection!: %@" = "אנא אשר את ההזמנה שלי ע״י הקשרת %@ באפליקציית קשר!";
+
+/* Please setup the Messages app and try again. */
+"Please setup the Messages app and try again." = "אנא אתחל את אפליקציית Messages ונסה שוב.";
+
+/* Please try the last operation again later. */
+"Please try again later." = "אנא נסה שוב מאוחר יותר.";
+
