@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Avi Cohen. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import Connection_
 import CoreData
 
@@ -31,7 +31,7 @@ class CoreDataStackMock: CoreDataStack {
             }()
     }
     
-    override func saveContext(context: NSManagedObjectContext) {
+    override func save() {
+        
     }
-    
 }

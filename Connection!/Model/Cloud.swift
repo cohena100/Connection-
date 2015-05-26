@@ -54,4 +54,8 @@ public class Cloud {
         parse.call(function: "acceptInvitation", withParameters: params, success: success, fail: fail)
     }
     
+    public func addEnterLocation(#success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "addEnterLocation", withParameters: nil, success: success, fail: fail)
+    }
+    
 }

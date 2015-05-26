@@ -33,6 +33,11 @@
 		043B39CD1B0495CB00AFBC98 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B39C41B0495CB00AFBC98 /* JSON.swift */; };
 		043B39CE1B0495CB00AFBC98 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B39C51B0495CB00AFBC98 /* Log.swift */; };
 		043B39D01B0495CB00AFBC98 /* ParseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B39C81B0495CB00AFBC98 /* ParseWrapper.swift */; };
+		04611BBC1B10732F00EA3403 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04611BBB1B10732F00EA3403 /* Locations.swift */; };
+		04611BBE1B10739C00EA3403 /* LocationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04611BBD1B10739C00EA3403 /* LocationsTests.swift */; };
+		04611BC01B10774E00EA3403 /* LocationManagerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04611BBF1B10774E00EA3403 /* LocationManagerWrapper.swift */; };
+		04611BC21B10779500EA3403 /* LocationManagerWrapperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04611BC11B10779500EA3403 /* LocationManagerWrapperMock.swift */; };
+		04611BC61B10972900EA3403 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04611BC51B10972900EA3403 /* Location.swift */; };
 		046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046428381AF4B9D2000EC419 /* AppDelegate.swift */; };
 		0464283E1AF4B9D2000EC419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0464283C1AF4B9D2000EC419 /* Main.storyboard */; };
 		046428401AF4B9D2000EC419 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0464283F1AF4B9D2000EC419 /* Images.xcassets */; };
@@ -40,6 +45,7 @@
 		046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */; };
 		046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */; };
 		046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */; };
+		0478676C1B14BF1C005CDB2A /* LocationsParseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0478676B1B14BF1C005CDB2A /* LocationsParseTests.swift */; };
 		04BE78A61B0DEFD200B8CC82 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04BE78A81B0DEFD200B8CC82 /* InfoPlist.strings */; };
 		04BE78AB1B0DEFD300B8CC82 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04BE78AD1B0DEFD300B8CC82 /* Localizable.strings */; };
 		04BE78B01B0DEFD300B8CC82 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04BE78B21B0DEFD300B8CC82 /* InfoPlist.strings */; };
@@ -84,6 +90,11 @@
 		043B39C51B0495CB00AFBC98 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Model/Log.swift; sourceTree = "<group>"; };
 		043B39C81B0495CB00AFBC98 /* ParseWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParseWrapper.swift; path = Model/ParseWrapper.swift; sourceTree = "<group>"; };
 		045B737A1AF8966300E5BD78 /* Connection!-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Connection!-Bridging-Header.h"; sourceTree = "<group>"; };
+		04611BBB1B10732F00EA3403 /* Locations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Locations.swift; path = Model/Locations.swift; sourceTree = "<group>"; };
+		04611BBD1B10739C00EA3403 /* LocationsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTests.swift; sourceTree = "<group>"; };
+		04611BBF1B10774E00EA3403 /* LocationManagerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationManagerWrapper.swift; path = Model/LocationManagerWrapper.swift; sourceTree = "<group>"; };
+		04611BC11B10779500EA3403 /* LocationManagerWrapperMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManagerWrapperMock.swift; sourceTree = "<group>"; };
+		04611BC51B10972900EA3403 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Model/Location.swift; sourceTree = "<group>"; };
 		046428331AF4B9D2000EC419 /* Connection!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Connection!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		046428371AF4B9D2000EC419 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		046428381AF4B9D2000EC419 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +106,7 @@
 		046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseWrapperMock.swift; sourceTree = "<group>"; };
 		046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackMock.swift; sourceTree = "<group>"; };
 		046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsTests.swift; sourceTree = "<group>"; };
+		0478676B1B14BF1C005CDB2A /* LocationsParseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsParseTests.swift; sourceTree = "<group>"; };
 		04BE78A21B0DE5E000B8CC82 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Main.strings; sourceTree = "<group>"; };
 		04BE78A31B0DE5E000B8CC82 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		04BE78A71B0DEFD200B8CC82 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -170,6 +182,9 @@
 		0423FFD61AFA12AB00C22722 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04611BC51B10972900EA3403 /* Location.swift */,
+				04611BBB1B10732F00EA3403 /* Locations.swift */,
+				04611BBF1B10774E00EA3403 /* LocationManagerWrapper.swift */,
 				043B39C01B0495CB00AFBC98 /* Cloud.swift */,
 				043B39C11B0495CB00AFBC98 /* Connection.swift */,
 				043B39C21B0495CB00AFBC98 /* Connections.swift */,
@@ -229,11 +244,14 @@
 		0464284B1AF4B9D2000EC419 /* Connection!Tests */ = {
 			isa = PBXGroup;
 			children = (
+				04611BBD1B10739C00EA3403 /* LocationsTests.swift */,
+				0478676B1B14BF1C005CDB2A /* LocationsParseTests.swift */,
 				046EE9F51B01F84200C79F34 /* ConnectionsTests.swift */,
 				04D003871B073817006A27B6 /* ConnectionsParseTests.swift */,
 				0464284C1AF4B9D2000EC419 /* Supporting Files */,
 				046EE9F31B01ED6200C79F34 /* CoreDataStackMock.swift */,
 				046EE9F11B01EAFF00C79F34 /* ParseWrapperMock.swift */,
+				04611BC11B10779500EA3403 /* LocationManagerWrapperMock.swift */,
 			);
 			path = "Connection!Tests";
 			sourceTree = "<group>";
@@ -372,7 +390,10 @@
 				043B39BD1B04959A00AFBC98 /* ProgressViewController.swift in Sources */,
 				043B39CD1B0495CB00AFBC98 /* JSON.swift in Sources */,
 				043B39CE1B0495CB00AFBC98 /* Log.swift in Sources */,
+				04611BC01B10774E00EA3403 /* LocationManagerWrapper.swift in Sources */,
+				04611BBC1B10732F00EA3403 /* Locations.swift in Sources */,
 				043B39C91B0495CB00AFBC98 /* Cloud.swift in Sources */,
+				04611BC61B10972900EA3403 /* Location.swift in Sources */,
 				046428391AF4B9D2000EC419 /* AppDelegate.swift in Sources */,
 				043B39CC1B0495CB00AFBC98 /* CoreDataStack.swift in Sources */,
 				0406206D1B00C8C7001E301F /* Model.xcdatamodeld in Sources */,
@@ -387,9 +408,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0478676C1B14BF1C005CDB2A /* LocationsParseTests.swift in Sources */,
+				04611BC21B10779500EA3403 /* LocationManagerWrapperMock.swift in Sources */,
 				046EE9F41B01ED6200C79F34 /* CoreDataStackMock.swift in Sources */,
 				046EE9F21B01EAFF00C79F34 /* ParseWrapperMock.swift in Sources */,
 				046EE9F61B01F84200C79F34 /* ConnectionsTests.swift in Sources */,
+				04611BBE1B10739C00EA3403 /* LocationsTests.swift in Sources */,
 				04D003881B073817006A27B6 /* ConnectionsParseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

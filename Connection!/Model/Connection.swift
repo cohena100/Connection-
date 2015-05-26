@@ -23,15 +23,17 @@ public class Connection: NSManagedObject {
     @NSManaged public var phone: String
     @NSManaged public var vn: String
     @NSManaged public var created: NSDate
+    @NSManaged public var locations: NSSet
 
-    convenience init(cid: String, name: String, phone: String, vn: String, insertIntoManagedObjectContext context: NSManagedObjectContext) {
-        let entity = NSEntityDescription.entityForName("Connection", inManagedObjectContext: context)!
-        self.init(entity: entity, insertIntoManagedObjectContext: context)
+    convenience init(cid: String, name: String, phone: String, vn: String, coreDataStack: CoreDataStack) {
+        let entity = NSEntityDescription.entityForName("Connection", inManagedObjectContext: coreDataStack.mainContext!)!
+        self.init(entity: entity, insertIntoManagedObjectContext: coreDataStack.mainContext!)
         self.cid = cid
         self.name = name
         self.phone = phone
         self.vn = vn
         self.created = NSDate()
+        coreDataStack.save()
     }
     
 }

@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Avi Cohen. All rights reserved.
 //
 
-import UIKit
-import CoreData
+import Foundation
 
 public class Connections {
     
@@ -40,8 +39,7 @@ public class Connections {
         cloud.invite(
             success: { [weak self] (json) in
                 if let vn = json[Connection.Fields.Vn.rawValue]?.string, cid = json[Connection.Fields.Cid.rawValue]?.string {
-                    let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext!)
-                    self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                    let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, coreDataStack: self!.coreDataStack)
                     success(connection)
                 } else {
                     Log.fail(functionName: __FUNCTION__, message: "not all objects are in the json response")
@@ -63,7 +61,7 @@ public class Connections {
             success: { [weak self] (json) in
                 if let vn = json[Connection.Fields.Vn.rawValue]?.string, cid = json[Connection.Fields.Cid.rawValue]?.string {
                     connection.vn = vn
-                    self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                    self!.coreDataStack.save()
                     success(connection)
                 } else {
                     Log.fail(functionName: __FUNCTION__, message: "not all objects are in the json response")
@@ -83,9 +81,8 @@ public class Connections {
     
     public func getConnections(#success: ([Connection]) -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "")
-        let fetchRequest = NSFetchRequest(entityName:"Connection")
         var error: NSError?
-        let connections = coreDataStack.mainContext!.executeFetchRequest(fetchRequest, error: &error) as? [Connection]
+        let connections = coreDataStack.fetch("Connection", error: &error) as? [Connection]
         if let connections = connections {
         } else {
             Log.fail(functionName: __FUNCTION__, message: "Could not fetch connections with error: \(error)")
@@ -114,10 +111,9 @@ public class Connections {
     
     private func getConnection(#phone: String) -> Connection? {
         Log.call(functionName: __FUNCTION__, message: "with phone: \(phone)")
-        let request = NSFetchRequest(entityName:"Connection")
-        request.predicate =  NSPredicate(format: "%K LIKE %@", "phone", phone)
+        let predicate =  NSPredicate(format: "%K LIKE %@", "phone", phone)
         var error: NSError?
-        let connections = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as? [Connection]
+        let connections = coreDataStack.fetch("Connection", predicate: predicate, error: &error) as? [Connection]
         if let connections = connections {
         } else {
             Log.fail(functionName: __FUNCTION__, message: "Could not fetch connections with error: \(error)")
@@ -133,31 +129,23 @@ public class Connections {
     
     public func deleteLastConnection(#success: (Connection) -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "")
-        let request = NSFetchRequest(entityName: "Connection")
-        let sortDescriptor = NSSortDescriptor(key: "created", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-        request.fetchLimit = 1
         var error: NSError?
-        let connections = coreDataStack.mainContext!.executeFetchRequest(request, error: &error) as? [Connection]
-        if let connections = connections {
+        let connection = coreDataStack.getLastObject("Connection", error: &error) as? Connection
+        if let connection = connection {
         } else {
-            Log.fail(functionName: __FUNCTION__, message: "fetching last added contact ended with error: \(error)")
-            fail(error!)
+            if let error = error {
+                fail(error)
+            } else {
+                let description = NSLocalizedString("Can't delete connection.", comment: "Can't delete connection from the circle of connections.")
+                let reason = NSLocalizedString("Got an internal error.", comment: "Got an internal error.")
+                let recovery = NSLocalizedString("Please try again later.", comment: "Please try the last operation again later.")
+                let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason, NSLocalizedRecoverySuggestionErrorKey: recovery]
+                error = NSError(domain: Cloud.Error.domain, code: Cloud.Error.code, userInfo: userInfo)
+                fail(error!)
+            }
             return
         }
-        let description = NSLocalizedString("Can't delete connection.", comment: "Can't delete connection from the circle of connections.")
-        let reason = NSLocalizedString("Got an internal error.", comment: "Got an internal error.")
-        let recovery = NSLocalizedString("Please try again later.", comment: "Please try the last operation again later.")
-        let userInfo = [NSLocalizedDescriptionKey: description, NSLocalizedFailureReasonErrorKey: reason, NSLocalizedRecoverySuggestionErrorKey: recovery]
-        error = NSError(domain: Cloud.Error.domain, code: Cloud.Error.code, userInfo: userInfo)
-        if connections!.count > 0 {
-        } else {
-            Log.warn(functionName: __FUNCTION__, message: "it appears that there are no connections at all")
-            fail(error!)
-            return
-        }
-        let connection = connections![0]
-        deleteConnection(connection, success: { (connection) -> () in
+        deleteConnection(connection!, success: { (connection) -> () in
             success(connection)
             }) { (error) -> () in
                 fail(error)
@@ -168,8 +156,7 @@ public class Connections {
         Log.call(functionName: __FUNCTION__, message: "")
         cloud.deleteConnection(connection,
             success: { [weak self] (json) in
-                self!.coreDataStack.mainContext!.deleteObject(connection)
-                self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                self!.coreDataStack.deleteObject(connection)
                 success(connection)
             }) { [weak self] (error) in
                 fail(error)
@@ -189,11 +176,9 @@ public class Connections {
         cloud.acceptInvitation(vn: vn, cid: cid, success: { [weak self] (json) -> () in
             if let vn = json[Connection.Fields.Vn.rawValue]?.string, cid = json[Connection.Fields.Cid.rawValue]?.string {
                 if let connection = connection {
-                    self!.coreDataStack.mainContext!.deleteObject(connection)
-                    self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                    self!.coreDataStack.deleteObject(connection)
                 }
-                let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, insertIntoManagedObjectContext: self!.coreDataStack.mainContext!)
-                self!.coreDataStack.saveContext(self!.coreDataStack.mainContext!)
+                let connection = Connection(cid: cid, name: name, phone: phone, vn: vn, coreDataStack: self!.coreDataStack)
                 success(connection)
             } else {
                 Log.fail(functionName: __FUNCTION__, message: "not all objects are in the json response")

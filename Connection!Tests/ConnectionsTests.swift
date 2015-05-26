@@ -39,21 +39,57 @@ class ConnectionsTests: XCTestCase {
     }
     
     override func tearDown() {
-        super.tearDown()
         connections = nil
         cloud = nil
         parseWrapper = nil
+        super.tearDown()
     }
 
-    // MARK: Invite
-    
-    func testInvite_invite1Connection_invited() {
+    func inviteConnections(amount: Int) {
+        if amount <= 0 {
+            return
+        }
         parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
         connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
-        }) { (error) -> () in
-            XCTFail("this method should call should not end up with an error")
+            }) { (error) -> () in
+                XCTFail("this method call should not end up with an error")
         }
+        if amount <= 1 {
+            return
+        }
+        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        connections.invite(name: name2, phone: phone2,
+            success: { (connection) -> () in
+            }) { (error) -> () in
+                XCTFail("this method call should not end up with an error")
+        }
+        if amount <= 2 {
+            return
+        }
+        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
+        connections.invite(name: name3, phone: phone3,
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+        })
+    }
+    
+    func deleteLastConnection() {
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+            }
+        )
+    }
+    
+    // MARK: Invite
+    
+    func testInvite_invite1Connection_invited() {
+        inviteConnections(1)
         parseWrapper.json = JSONValue.fromObject([cid1])
         connections.getConnections(
             success: { [weak self] connections in
@@ -67,24 +103,10 @@ class ConnectionsTests: XCTestCase {
                 XCTFail("this method should not end up with an error")
             }
         )
-
     }
     
     func testInvite_invite2Connections_2invitedCounted() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { [weak self] (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.invite(name: name2, phone: phone2,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
+        inviteConnections(2)
         parseWrapper.json = JSONValue.fromObject([cid1, cid2])
         connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 2, "there should be only 2 connections")
@@ -102,27 +124,7 @@ class ConnectionsTests: XCTestCase {
     }
     
     func testInvite_inviteManyConnections_manyInvitedCounted() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.invite(name: name2, phone: phone2,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.invite(name: name3, phone: phone3,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
+        inviteConnections(3)
         parseWrapper.json = JSONValue.fromObject([cid1, cid2, cid3])
         connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 3, "there should be only 4 connections")
@@ -134,21 +136,8 @@ class ConnectionsTests: XCTestCase {
     // MARK: Delete
     
     func testInvite_invite1ConnectionButDeleteIt_deleted() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-        connections.deleteLastConnection(
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
+        inviteConnections(1)
+        deleteLastConnection()
         parseWrapper.json = JSONValue.fromObject([])
         connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 0, "there should be no connections")
@@ -158,28 +147,8 @@ class ConnectionsTests: XCTestCase {
     }
     
     func testInvite_invite2ConnectionButDeleteTheLast_onlyLastIsDeleted() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.invite(name: name2, phone: phone2,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        connections.deleteLastConnection(
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
+        inviteConnections(2)
+        deleteLastConnection()
         parseWrapper.json = JSONValue.fromObject([cid1])
         connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
@@ -191,28 +160,7 @@ class ConnectionsTests: XCTestCase {
     }
     
     func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.invite(name: name2, phone: phone2,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.invite(name: name3, phone: phone3,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
+        inviteConnections(3)
         parseWrapper.json = JSONValue.fromObject(["cid": cid3])
         connections.deleteLastConnection(
             success: { [weak self] (connection) -> () in
@@ -225,21 +173,8 @@ class ConnectionsTests: XCTestCase {
     }
     
     func testInvite_invite1ConnectionButDeleteItAndThenDeleteLastAgain_returnError() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-        connections.deleteLastConnection(
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
+        inviteConnections(1)
+        deleteLastConnection()
         connections.deleteLastConnection(
             success: { (connection) -> () in
                 XCTFail("this method should call should not end up with success")
@@ -251,35 +186,8 @@ class ConnectionsTests: XCTestCase {
     }
     
     func testInvite_invite3ConnectionButDeleteTheLastAndThe2ndWasDeleted_onlyTheFirstConnectionExists() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
-        connections.invite(name: name2, phone: phone2,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
-        connections.invite(name: name3, phone: phone3,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
-        connections.deleteLastConnection(
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
+        inviteConnections(3)
+        deleteLastConnection()
         parseWrapper.json = JSONValue.fromObject([cid1])
         connections.getConnections(success: { [weak self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
@@ -347,13 +255,7 @@ class ConnectionsTests: XCTestCase {
     }
 
     func testAcceptInvitation_acceptInvitationFromAnAreadyConnection_stillHas1Connection () {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
-        connections.invite(name: name1, phone: phone1,
-            success: { (connection) -> () in
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-        })
+        inviteConnections(1)
         parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
         connections.acceptInvitation(name: name1, phone: phone1, vn: vn1, success: { [weak self] (connection) -> () in
             

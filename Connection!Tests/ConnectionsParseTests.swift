@@ -41,10 +41,10 @@ class ConnectionsParseTests: XCTestCase {
     }
     
     override func tearDown() {
-        super.tearDown()
         connections = nil
         cloud = nil
         parseWrapper = nil
+        super.tearDown()
     }
     
     // MARK: Invite and Delete

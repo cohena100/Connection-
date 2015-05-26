@@ -59,6 +59,15 @@ public enum JSONValue {
         }
     }
     
+    public var float: Float? {
+        switch self {
+        case .JSONNumber(let value):
+            return value.floatValue
+        default:
+            return nil
+        }
+    }
+    
     public var bool: Bool? {
         switch self {
         case .JSONNumber(let value):

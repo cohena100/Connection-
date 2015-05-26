@@ -14,7 +14,6 @@ public class CoreDataStack {
     static let sharedInstance = CoreDataStack()
     
     public init() {
-        
     }
     
     deinit {
@@ -97,6 +96,55 @@ public class CoreDataStack {
             }
             self!.saveContext(self!.mainContext!)
         }
+    }
+    
+    public func save() {
+        saveContext(mainContext!)
+    }
+    
+    func deleteObject(object: NSManagedObject) {
+        mainContext!.deleteObject(object)
+        save()
+    }
+    
+    func fetch(entity: String, predicate: NSPredicate? = nil, inout error: NSError?) -> [AnyObject]? {
+        let request = NSFetchRequest(entityName:entity)
+        request.predicate =  predicate
+        return mainContext!.executeFetchRequest(request, error: &error)
+    }
+    
+    func fetchOne(entity: String, predicate: NSPredicate? = nil, inout error: NSError?) -> AnyObject? {
+        let request = NSFetchRequest(entityName:entity)
+        request.predicate =  predicate
+        request.fetchLimit = 1
+        let elements = mainContext!.executeFetchRequest(request, error: &error)
+        if let elements = elements {
+            
+        } else {
+            return nil
+        }
+        if elements!.count == 0 {
+            return nil
+        }
+        return elements![0]
+    }
+    
+    func getLastObject(entity: String, inout error: NSError?) -> AnyObject? {
+        let request = NSFetchRequest(entityName: entity)
+        let sortDescriptor = NSSortDescriptor(key: "created", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        request.fetchLimit = 1
+        let objects = mainContext!.executeFetchRequest(request, error: &error)
+        if let objects = objects {
+        } else {
+            return nil
+        }
+        if objects!.count > 0 {
+        } else {
+            Log.warn(functionName: __FUNCTION__, message: "it appears that there are no objects at all")
+            return nil
+        }
+        return objects![0]
     }
     
     @objc func mainContextDidSave(notification: NSNotification) {
