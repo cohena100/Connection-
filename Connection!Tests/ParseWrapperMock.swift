@@ -11,15 +11,20 @@ import Connection_
 
 class ParseWrapperMock: ParseWrapper {
 
-    var json: JSONValue?
-    var error: NSError?
+    enum Result {
+        case Success(JSONValue)
+        case Fail(NSError)
+    }
+    
+    var result: Result!
     
     override func call(#function: String, withParameters parameters: [NSObject : AnyObject]?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
-        if let json = self.json {
+        switch result! {
+        case .Success(let json):
             success(json)
-        } else if let error = self.error {
+        case .Fail(let error):
             fail(error)
-        } else {
+        default:
             fail(NSError())
         }
     }

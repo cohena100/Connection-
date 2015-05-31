@@ -39,6 +39,7 @@ class LocationsTests: XCTestCase, LocationsDelegate {
     var locations: Locations!
     var connections: Connections!
     var didEnterLocationWasCalled = false
+    var didEnterLocationButErrorWasCalled = false
     
     override func setUp() {
         super.setUp()
@@ -58,6 +59,7 @@ class LocationsTests: XCTestCase, LocationsDelegate {
         cloud = nil
         parseWrapper = nil
         didEnterLocationWasCalled = false
+        didEnterLocationButErrorWasCalled = false
         super.tearDown()
     }
     
@@ -65,7 +67,7 @@ class LocationsTests: XCTestCase, LocationsDelegate {
         if amount <= 0 {
             return
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn1, "cid": cid1])!)
         connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             }) { (error) -> () in
@@ -74,7 +76,7 @@ class LocationsTests: XCTestCase, LocationsDelegate {
         if amount <= 1 {
             return
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn2, "cid": cid2])!)
         connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             }) { (error) -> () in
@@ -99,9 +101,9 @@ class LocationsTests: XCTestCase, LocationsDelegate {
         }
         if amount <= 1 {
             inviteConnections(1)
-            parseWrapper.json = JSONValue.fromObject([cid1])
+            parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
             getConnections { [unowned self] connections in
-                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+                self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])!)
                 self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
@@ -112,15 +114,15 @@ class LocationsTests: XCTestCase, LocationsDelegate {
         }
         if amount <= 2 {
             inviteConnections(2)
-            parseWrapper.json = JSONValue.fromObject([cid1, cid2])
+            parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1, cid2])!)
             getConnections { [unowned self] connections in
-                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+                self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])!)
                 self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
                         XCTFail("this method call should not end up with an error")
                 }
-                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])
+                self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])!)
                 self.locations.addEnterLocation(name: self.locationName2, latitude: self.latitude2, longitude: self.longitude2, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
@@ -133,9 +135,9 @@ class LocationsTests: XCTestCase, LocationsDelegate {
     
     func testAddEnterLocation_anEnterLocation_enterLocationAdded() {
         inviteConnections(1)
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         getConnections { [unowned self] connections in
-            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+            self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])!)
             self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
@@ -158,15 +160,15 @@ class LocationsTests: XCTestCase, LocationsDelegate {
     
     func testAddEnterLocation_anEnterLocationWithManyConnections_enterLocationAdded() {
         inviteConnections(2)
-        parseWrapper.json = JSONValue.fromObject([cid1, cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1, cid2])!)
         getConnections() { [unowned self] connections in
-            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+            self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])!)
             self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
                     XCTFail("this method call should not end up with an error")
             }
-            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])
+            self.parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])!)
             self.locations.addEnterLocation(name: self.locationName2, latitude: self.latitude2, longitude: self.longitude2, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
@@ -174,7 +176,7 @@ class LocationsTests: XCTestCase, LocationsDelegate {
             }
             let locations = self.locations.getLocations()
         }
-        parseWrapper.json = JSONValue.fromObject([cid1, cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1, cid2])!)
         getConnections() { [unowned self] connections in
             let connection = connections[0]
             XCTAssertEqual(connection.locations.count, 2, "there should be exactly two locations")
@@ -197,16 +199,28 @@ class LocationsTests: XCTestCase, LocationsDelegate {
     
     func testLocationEntered_addEnterLocationAndEnterIt_noLocationsRemaining () {
         addLocation(1)
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["cids": [cid1]])!)
         locationManagerWrapper.didEnterLocation(lid: lid1)
         XCTAssertTrue(didEnterLocationWasCalled, "delgate method should have been called")
     }
 
+    func testLocationEntered_addEnterLocationAndEnterItButError_noLocationsRemainingAndError () {
+        addLocation(1)
+        parseWrapper.result = ParseWrapperMock.Result.Fail(NSError())
+        locationManagerWrapper.didEnterLocation(lid: lid1)
+        XCTAssertTrue(didEnterLocationButErrorWasCalled, "correct delgate method should have been called")
+    }
+    
 }
 
 extension LocationsTests: LocationsDelegate {
     
     func didEnterLocation(#location: Location) {
         didEnterLocationWasCalled = true
+    }
+
+    func didEnterLocationButError(#location: Location, error: NSError) {
+        didEnterLocationButErrorWasCalled = true
     }
     
 }

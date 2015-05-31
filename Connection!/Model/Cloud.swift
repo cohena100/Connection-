@@ -58,4 +58,8 @@ public class Cloud {
         parse.call(function: "addEnterLocation", withParameters: nil, success: success, fail: fail)
     }
     
+    public func didEnterLocation(#cids:[String], success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        parse.call(function: "didEnterLocation", withParameters: ["cids": cids], success: success, fail: fail)
+    }
+    
 }

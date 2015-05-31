@@ -49,7 +49,7 @@ class ConnectionsTests: XCTestCase {
         if amount <= 0 {
             return
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn1, "cid": cid1])!)
         connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             }) { (error) -> () in
@@ -58,7 +58,7 @@ class ConnectionsTests: XCTestCase {
         if amount <= 1 {
             return
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn2, "cid": cid2])!)
         connections.invite(name: name2, phone: phone2,
             success: { (connection) -> () in
             }) { (error) -> () in
@@ -67,7 +67,7 @@ class ConnectionsTests: XCTestCase {
         if amount <= 2 {
             return
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn3, "cid": cid3])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn3, "cid": cid3])!)
         connections.invite(name: name3, phone: phone3,
             success: { (connection) -> () in
             },
@@ -90,7 +90,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite1Connection_invited() {
         inviteConnections(1)
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         connections.getConnections(
             success: { [unowned self] connections in
                 let connection = connections[0]
@@ -107,7 +107,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite2Connections_2invitedCounted() {
         inviteConnections(2)
-        parseWrapper.json = JSONValue.fromObject([cid1, cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1, cid2])!)
         connections.getConnections(success: { [unowned self] (connections) -> () in
             XCTAssertEqual(connections.count, 2, "there should be only 2 connections")
             var connection = connections[1]
@@ -125,7 +125,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_inviteManyConnections_manyInvitedCounted() {
         inviteConnections(3)
-        parseWrapper.json = JSONValue.fromObject([cid1, cid2, cid3])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1, cid2, cid3])!)
         connections.getConnections(success: { [unowned self] (connections) -> () in
             XCTAssertEqual(connections.count, 3, "there should be only 4 connections")
             }) { (error) -> () in
@@ -138,7 +138,7 @@ class ConnectionsTests: XCTestCase {
     func testInvite_invite1ConnectionButDeleteIt_deleted() {
         inviteConnections(1)
         deleteLastConnection()
-        parseWrapper.json = JSONValue.fromObject([])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([])!)
         connections.getConnections(success: { [unowned self] (connections) -> () in
             XCTAssertEqual(connections.count, 0, "there should be no connections")
             }) { (error) -> () in
@@ -149,7 +149,7 @@ class ConnectionsTests: XCTestCase {
     func testInvite_invite2ConnectionButDeleteTheLast_onlyLastIsDeleted() {
         inviteConnections(2)
         deleteLastConnection()
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         connections.getConnections(success: { [unowned self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
             let connection = connections[0]
@@ -161,7 +161,7 @@ class ConnectionsTests: XCTestCase {
     
     func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
         inviteConnections(3)
-        parseWrapper.json = JSONValue.fromObject(["cid": cid3])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["cid": cid3])!)
         connections.deleteLastConnection(
             success: { [unowned self] (connection) -> () in
                 XCTAssertEqual(connection.cid, self.cid3, "cid should be cid3")
@@ -188,7 +188,7 @@ class ConnectionsTests: XCTestCase {
     func testInvite_invite3ConnectionButDeleteTheLastAndThe2ndWasDeleted_onlyTheFirstConnectionExists() {
         inviteConnections(3)
         deleteLastConnection()
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         connections.getConnections(success: { [unowned self] (connections) -> () in
             XCTAssertEqual(connections.count, 1, "there should be one connection")
             let connection = connections[0]
@@ -201,19 +201,19 @@ class ConnectionsTests: XCTestCase {
     // MARK: Invite again
     
     func testInviteAgain_invite1ConnectionAndThenInviteTheSameoneAgain_only1Connection() {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn1, "cid": cid1])!)
         connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             }) { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         }
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn2, "cid": cid1])!)
         connections.invite(name: name1, phone: phone1,
             success: { (connection) -> () in
             }) { (error) -> () in
                 XCTFail("this method should call should not end up with an error")
         }
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         connections.getConnections(
             success: { [unowned self] connections in
                 XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
@@ -232,13 +232,13 @@ class ConnectionsTests: XCTestCase {
     // MARK: Accept Invitation
     
     func testAcceptInvitation_acceptInvitation_has1Connection () {
-        parseWrapper.json = JSONValue.fromObject(["vn": vn1, "cid": cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn1, "cid": cid1])!)
         connections.acceptInvitation(name: name1, phone: phone1, vn: vn1, success: { [unowned self] (connection) -> () in
             
         }) { (error) -> () in
             
         }
-        parseWrapper.json = JSONValue.fromObject([cid1])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
         connections.getConnections(
             success: { [unowned self] connections in
                 XCTAssertEqual(connections.count, 1, "there should be only 1 connection")
@@ -256,13 +256,13 @@ class ConnectionsTests: XCTestCase {
 
     func testAcceptInvitation_acceptInvitationFromAnAreadyConnection_stillHas1Connection () {
         inviteConnections(1)
-        parseWrapper.json = JSONValue.fromObject(["vn": vn2, "cid": cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["vn": vn2, "cid": cid2])!)
         connections.acceptInvitation(name: name1, phone: phone1, vn: vn1, success: { [unowned self] (connection) -> () in
             
             }) { (error) -> () in
                 
         }
-        parseWrapper.json = JSONValue.fromObject([cid2])
+        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid2])!)
         connections.getConnections(
             success: { [unowned self] connections in
                 XCTAssertEqual(connections.count, 1, "there should be only 1 connection")

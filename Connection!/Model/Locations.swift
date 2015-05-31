@@ -13,6 +13,8 @@ import Foundation
 public protocol LocationsDelegate: class {
     
     func didEnterLocation(#location: Location)
+    func didEnterLocationButError(#location: Location, error: NSError)
+    
 }
 
 public class Locations {
@@ -99,7 +101,14 @@ extension Locations: LocationManagerWrapperDelegate {
             Log.warn(functionName: __FUNCTION__, message: "There should have been a location to delete")
             return
         }
-        delegate?.didEnterLocation(location: location!)
+        let cids = Array(lazy(location!.connections as! Set<Connection>).map { (connection: Connection) -> String in
+            return connection.cid
+        })
+        cloud.didEnterLocation(cids: cids, success: { [unowned self] (json) -> () in
+            self.delegate?.didEnterLocation(location: location!)
+        }) { [unowned self] (error) -> () in
+            self.delegate?.didEnterLocationButError(location: location!, error: error)
+        }
     }
     
 }
