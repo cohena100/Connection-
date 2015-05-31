@@ -57,39 +57,39 @@ class LocationsParseTests: XCTestCase {
             }) { (error) -> () in
                 XCTFail("should not end up with an error")
         }
-        waitForExpectationsWithTimeout(timeout) { [weak self] (error) in
+        waitForExpectationsWithTimeout(timeout) { [unowned self] (error) in
             if let error = error {
                 XCTFail("should not end up with an error")
                 return
             }
             var allConnections: [Connection]?
-            let expectation = self!.expectationWithDescription("get connections")
-            self!.connections.getConnections(success: { (connections) -> () in
+            let expectation = self.expectationWithDescription("get connections")
+            self.connections.getConnections(success: { (connections) -> () in
                 allConnections = connections
                 expectation.fulfill()
             }, fail: { (error) -> () in
                 XCTFail("should not end up with an error")
             })
-            self!.waitForExpectationsWithTimeout(self!.timeout) { [weak self] (error) in
+            self.waitForExpectationsWithTimeout(self.timeout) { [unowned self] (error) in
                 if let error = error {
                     XCTFail("should not end up with an error")
                     return
                 }
-                let expectation = self!.expectationWithDescription("add enter location")
-                self!.locations.addEnterLocation(name: self!.name1, latitude: self!.latitude1, longitude: self!.longitude2, connections: allConnections!, success: { (location) -> () in
+                let expectation = self.expectationWithDescription("add enter location")
+                self.locations.addEnterLocation(name: self.name1, latitude: self.latitude1, longitude: self.longitude2, connections: allConnections!, success: { (location) -> () in
                     expectation.fulfill()
                 }, fail: { (error) -> () in
                     XCTFail("should not end up with an error")
                 })
-                self!.waitForExpectationsWithTimeout(self!.timeout) { [weak self] (error) in
+                self.waitForExpectationsWithTimeout(self.timeout) { [unowned self] (error) in
                     if let error = error {
                         XCTFail("should not end up with an error")
                         return
                     }
-                    let allLocations = self!.locations.getLocations()
+                    let allLocations = self.locations.getLocations()
                     XCTAssertEqual(allLocations.count, 1, "there should be only one location")
-                    let expectation = self!.expectationWithDescription("cleanup")
-                    self!.connections.deleteLastConnection(
+                    let expectation = self.expectationWithDescription("cleanup")
+                    self.connections.deleteLastConnection(
                         success: { (connection) -> () in
                             expectation.fulfill()
                         },
@@ -97,7 +97,7 @@ class LocationsParseTests: XCTestCase {
                             XCTFail("should not end up with an error")
                         }
                     )
-                    self!.waitForExpectationsWithTimeout(self!.timeout) { (error) in
+                    self.waitForExpectationsWithTimeout(self.timeout) { (error) in
                         if let error = error {
                             XCTFail("should not end up with an error")
                             return

@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 import Connection_
 
-class LocationsTests: XCTestCase {
+class LocationsTests: XCTestCase, LocationsDelegate {
     
     let locationName1 = "locationName1"
     let latitude1 = 1.0
@@ -38,6 +38,7 @@ class LocationsTests: XCTestCase {
     var locationManagerWrapper: LocationManagerWrapperMock!
     var locations: Locations!
     var connections: Connections!
+    var didEnterLocationWasCalled = false
     
     override func setUp() {
         super.setUp()
@@ -46,6 +47,8 @@ class LocationsTests: XCTestCase {
         locationManagerWrapper = LocationManagerWrapperMock()
         connections = Connections(coreDataStack: CoreDataStackMock(), cloud: cloud)
         locations = Locations(coreDataStack: CoreDataStackMock(), cloud: cloud, locationManagerWrapper: locationManagerWrapper)
+        locationManagerWrapper.delegate = locations
+        locations.delegate = self
     }
     
     override func tearDown() {
@@ -54,6 +57,7 @@ class LocationsTests: XCTestCase {
         locationManagerWrapper = nil
         cloud = nil
         parseWrapper = nil
+        didEnterLocationWasCalled = false
         super.tearDown()
     }
     
@@ -80,7 +84,7 @@ class LocationsTests: XCTestCase {
     
     func getConnections(success: ([Connection]) -> ()) {
         connections.getConnections(
-            success: { [weak self] connections in
+            success: { [unowned self] connections in
                 success(connections)
             },
             fail: { (error) -> () in
@@ -89,16 +93,16 @@ class LocationsTests: XCTestCase {
         )
     }
     
-    func addLocations(amount: Int) {
+    func addLocation(amount: Int) {
         if amount <= 0 {
             return
         }
         if amount <= 1 {
             inviteConnections(1)
             parseWrapper.json = JSONValue.fromObject([cid1])
-            getConnections { [weak self] connections in
-                self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid1, "radius": self!.radius])
-                self!.locations.addEnterLocation(name: self!.locationName1, latitude: self!.latitude1, longitude: self!.longitude1, connections: connections,
+            getConnections { [unowned self] connections in
+                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+                self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
                         XCTFail("this method call should not end up with an error")
@@ -109,15 +113,15 @@ class LocationsTests: XCTestCase {
         if amount <= 2 {
             inviteConnections(2)
             parseWrapper.json = JSONValue.fromObject([cid1, cid2])
-            getConnections { [weak self] connections in
-                self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid1, "radius": self!.radius])
-                self!.locations.addEnterLocation(name: self!.locationName1, latitude: self!.latitude1, longitude: self!.longitude1, connections: connections,
+            getConnections { [unowned self] connections in
+                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+                self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
                         XCTFail("this method call should not end up with an error")
                 }
-                self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid2, "radius": self!.radius])
-                self!.locations.addEnterLocation(name: self!.locationName2, latitude: self!.latitude2, longitude: self!.longitude2, connections: connections,
+                self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])
+                self.locations.addEnterLocation(name: self.locationName2, latitude: self.latitude2, longitude: self.longitude2, connections: connections,
                     success: { (location) -> () in
                     }) { (error) -> () in
                         XCTFail("this method call should not end up with an error")
@@ -130,22 +134,22 @@ class LocationsTests: XCTestCase {
     func testAddEnterLocation_anEnterLocation_enterLocationAdded() {
         inviteConnections(1)
         parseWrapper.json = JSONValue.fromObject([cid1])
-        getConnections { [weak self] connections in
-            self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid1, "radius": self!.radius])
-            self!.locations.addEnterLocation(name: self!.locationName1, latitude: self!.latitude1, longitude: self!.longitude1, connections: connections,
+        getConnections { [unowned self] connections in
+            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+            self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
                     XCTFail("this method call should not end up with an error")
             }
-            let loctions = self!.locations.getLocations()
+            let loctions = self.locations.getLocations()
             XCTAssertEqual(loctions.count, 1, "there should be only one location")
             let location = loctions[0]
-            XCTAssertEqual(location.accuracy.floatValue, self!.accuracy, "accuracy is not correct")
-            XCTAssertEqual(location.latitude.doubleValue, self!.latitude1, "latitude is not correct")
-            XCTAssertEqual(location.lid, self!.lid1, "lid is not correct")
-            XCTAssertEqual(location.longitude.doubleValue, self!.longitude1, "longitude is not correct")
-            XCTAssertEqual(location.name, self!.locationName1, "name is not correct")
-            XCTAssertEqual(location.radius.floatValue, self!.radius, "radius is not correct")
+            XCTAssertEqual(location.accuracy.floatValue, self.accuracy, "accuracy is not correct")
+            XCTAssertEqual(location.latitude.doubleValue, self.latitude1, "latitude is not correct")
+            XCTAssertEqual(location.lid, self.lid1, "lid is not correct")
+            XCTAssertEqual(location.longitude.doubleValue, self.longitude1, "longitude is not correct")
+            XCTAssertEqual(location.name, self.locationName1, "name is not correct")
+            XCTAssertEqual(location.radius.floatValue, self.radius, "radius is not correct")
             XCTAssertTrue(location.started.boolValue, "started is not correct")
             XCTAssertEqual(location.type.integerValue, Location.LocationType.Enter.rawValue, "type is not correct")
             XCTAssertEqual(location.connections.count, 1, "started is not correct")
@@ -155,40 +159,54 @@ class LocationsTests: XCTestCase {
     func testAddEnterLocation_anEnterLocationWithManyConnections_enterLocationAdded() {
         inviteConnections(2)
         parseWrapper.json = JSONValue.fromObject([cid1, cid2])
-        getConnections() { [weak self] connections in
-            self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid1, "radius": self!.radius])
-            self!.locations.addEnterLocation(name: self!.locationName1, latitude: self!.latitude1, longitude: self!.longitude1, connections: connections,
+        getConnections() { [unowned self] connections in
+            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid1, "radius": self.radius])
+            self.locations.addEnterLocation(name: self.locationName1, latitude: self.latitude1, longitude: self.longitude1, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
                     XCTFail("this method call should not end up with an error")
             }
-            self!.parseWrapper.json = JSONValue.fromObject(["accuracy": self!.accuracy, "lid": self!.lid2, "radius": self!.radius])
-            self!.locations.addEnterLocation(name: self!.locationName2, latitude: self!.latitude2, longitude: self!.longitude2, connections: connections,
+            self.parseWrapper.json = JSONValue.fromObject(["accuracy": self.accuracy, "lid": self.lid2, "radius": self.radius])
+            self.locations.addEnterLocation(name: self.locationName2, latitude: self.latitude2, longitude: self.longitude2, connections: connections,
                 success: { (location) -> () in
                 }) { (error) -> () in
                     XCTFail("this method call should not end up with an error")
             }
-            let locations = self!.locations.getLocations()
+            let locations = self.locations.getLocations()
         }
         parseWrapper.json = JSONValue.fromObject([cid1, cid2])
-        getConnections() { [weak self] connections in
+        getConnections() { [unowned self] connections in
             let connection = connections[0]
             XCTAssertEqual(connection.locations.count, 2, "there should be exactly two locations")
         }
     }
     
     func testDeleteLocation_DeleteAddedLocation_deleted() {
-        addLocations(1)
-        locations.deleteLocation(lid1)
+        addLocation(1)
+        locations.deleteLocation(lid: lid1)
         let allLocations = locations.getLocations()
         XCTAssertEqual(allLocations.count, 0, "there should be no locations")
     }
     
     func testDeleteLocation_DeleteOneOfTwoLocations_onlyOneLocation() {
-        addLocations(2)
-        locations.deleteLocation(lid2)
+        addLocation(2)
+        locations.deleteLocation(lid: lid2)
         let allLocations = locations.getLocations()
         XCTAssertEqual(allLocations.count, 1, "there should be exactly one location")
+    }
+    
+    func testLocationEntered_addEnterLocationAndEnterIt_noLocationsRemaining () {
+        addLocation(1)
+        locationManagerWrapper.didEnterLocation(lid: lid1)
+        XCTAssertTrue(didEnterLocationWasCalled, "delgate method should have been called")
+    }
+
+}
+
+extension LocationsTests: LocationsDelegate {
+    
+    func didEnterLocation(#location: Location) {
+        didEnterLocationWasCalled = true
     }
     
 }

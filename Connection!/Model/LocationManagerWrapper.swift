@@ -8,15 +8,21 @@
 
 import Foundation
 
+public protocol LocationManagerWrapperDelegate: class {
+    func didEnterLocation(#lid: String)
+}
+
 public class LocationManagerWrapper {
     
     static let sharedInstance = LocationManagerWrapper()
+    
+    public weak var delegate: LocationManagerWrapperDelegate?
 
     public init() {
     }
     
-    func addEnterLocation(#lid: String, radius: Float, latitude: Double, longitude: Double) {
-        // TODO:
+    public func addEnterLocation(#lid: String, latitude: Double, longitude: Double, radius: Float, accuracy: Float) {
     }
     
 }
+
