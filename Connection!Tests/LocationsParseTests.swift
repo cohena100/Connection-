@@ -31,7 +31,10 @@ class LocationsParseTests: XCTestCase {
     var locationManagerWrapper: LocationManagerWrapperMock!
     var locations: Locations!
     var connections: Connections!
-    
+    var didEnterLocationWasCalled = false
+    var didEnterLocationButErrorWasCalled = false
+    var expectation: XCTestExpectation!
+   
     override func setUp() {
         super.setUp()
         parseWrapper = ParseWrapper()
@@ -39,6 +42,8 @@ class LocationsParseTests: XCTestCase {
         locationManagerWrapper = LocationManagerWrapperMock()
         connections = Connections(coreDataStack: CoreDataStackMock(), cloud: cloud)
         locations = Locations(coreDataStack: CoreDataStackMock(), cloud: cloud, locationManagerWrapper: locationManagerWrapper)
+        locationManagerWrapper.delegate = locations
+        locations.delegate = self
     }
     
     override func tearDown() {
@@ -47,9 +52,29 @@ class LocationsParseTests: XCTestCase {
         locationManagerWrapper = nil
         cloud = nil
         parseWrapper = nil
+        didEnterLocationWasCalled = false
+        didEnterLocationButErrorWasCalled = false
         super.tearDown()
     }
 
+    func cleanup() {
+        let expectation = self.expectationWithDescription("cleanup")
+        self.connections.deleteLastConnection(
+            success: { (connection) -> () in
+                expectation.fulfill()
+            },
+            fail: { (error) -> () in
+                XCTFail("should not end up with an error")
+            }
+        )
+        self.waitForExpectationsWithTimeout(self.timeout) { (error) in
+            if let error = error {
+                XCTFail("should not end up with an error")
+                return
+            }
+        }
+    }
+    
     func testAddEnterLocation_anEnterLocation_enterLocationAdded() {
         let expectation = expectationWithDescription("invite user")
         connections.invite(name: name1, phone: phone1, success: { (connection) -> () in
@@ -88,24 +113,76 @@ class LocationsParseTests: XCTestCase {
                     }
                     let allLocations = self.locations.getLocations()
                     XCTAssertEqual(allLocations.count, 1, "there should be only one location")
-                    let expectation = self.expectationWithDescription("cleanup")
-                    self.connections.deleteLastConnection(
-                        success: { (connection) -> () in
-                            expectation.fulfill()
-                        },
-                        fail: { (error) -> () in
-                            XCTFail("should not end up with an error")
-                        }
-                    )
+                    self.cleanup()
+                }
+            }
+        }
+    }
+    
+    func testLocationEntered_addEnterLocationAndEnterIt_didEnterLocationDelegateCalled() {
+        let expectation = expectationWithDescription("invite user")
+        connections.invite(name: name1, phone: phone1, success: { (connection) -> () in
+            expectation.fulfill()
+            }) { (error) -> () in
+                XCTFail("should not end up with an error")
+        }
+        waitForExpectationsWithTimeout(timeout) { [unowned self] (error) in
+            if let error = error {
+                XCTFail("should not end up with an error")
+                return
+            }
+            var allConnections: [Connection]?
+            let expectation = self.expectationWithDescription("get connections")
+            self.connections.getConnections(success: { (connections) -> () in
+                allConnections = connections
+                expectation.fulfill()
+                }, fail: { (error) -> () in
+                    XCTFail("should not end up with an error")
+            })
+            self.waitForExpectationsWithTimeout(self.timeout) { [unowned self] (error) in
+                if let error = error {
+                    XCTFail("should not end up with an error")
+                    return
+                }
+                let expectation = self.expectationWithDescription("add enter location")
+                var lid: String = ""
+                self.locations.addEnterLocation(name: self.name1, latitude: self.latitude1, longitude: self.longitude2, connections: allConnections!, success: { (location) -> () in
+                    lid = location.lid
+                    expectation.fulfill()
+                    }, fail: { (error) -> () in
+                        XCTFail("should not end up with an error")
+                })
+                self.waitForExpectationsWithTimeout(self.timeout) { [unowned self] (error) in
+                    if let error = error {
+                        XCTFail("should not end up with an error")
+                        return
+                    }
+                    self.expectation = self.expectationWithDescription("did enter location")
+                    self.locationManagerWrapper.didEnterLocation(lid: lid)
                     self.waitForExpectationsWithTimeout(self.timeout) { (error) in
                         if let error = error {
                             XCTFail("should not end up with an error")
                             return
                         }
+                        self.cleanup()
                     }
                 }
             }
         }
+    }
+    
+}
+
+extension LocationsParseTests: LocationsDelegate {
+    
+    func didEnterLocation(#location: Location) {
+        didEnterLocationWasCalled = true
+        expectation.fulfill()
+    }
+    
+    func didEnterLocationButError(#location: Location, error: NSError) {
+        didEnterLocationButErrorWasCalled = true
+        expectation.fulfill()
     }
     
 }

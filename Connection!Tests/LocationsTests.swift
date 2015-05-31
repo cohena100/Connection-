@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 import Connection_
 
-class LocationsTests: XCTestCase, LocationsDelegate {
+class LocationsTests: XCTestCase {
     
     let locationName1 = "locationName1"
     let latitude1 = 1.0
