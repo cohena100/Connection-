@@ -94,7 +94,7 @@ class MainTableViewController: UITableViewController {
                 self.presentViewController(messageVC, animated: true, completion: nil)
             }
             else {
-                Log.fail(fileName:__FILE__, functionName: __FUNCTION__, message: "Can't send the message since the user hasn't setup the Messages app yet.")
+                Log.fail(functionName: __FUNCTION__, message: "Can't send the message since the user hasn't setup the Messages app yet.")
                 deleteLastConnection()
                 let title = NSLocalizedString("Message Composing", comment:"An alert title called: Message Composing ")
                 let message = NSLocalizedString("Please setup the Messages app and try again.", comment:"Please setup the Messages app and try again.")
