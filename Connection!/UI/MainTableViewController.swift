@@ -162,25 +162,27 @@ extension MainTableViewController: UITableViewDataSource {
 extension MainTableViewController: ABPeoplePickerNavigationControllerDelegate {
     
     func peoplePickerNavigationController(peoplePicker: ABPeoplePickerNavigationController!, didSelectPerson person: ABRecord!, property: ABPropertyID, identifier: ABMultiValueIdentifier) {
-        peoplePicker.dismissViewControllerAnimated(false) { [weak self] in
-            let vc = self!.storyboard!.instantiateViewControllerWithIdentifier("ProgressViewController") as! ProgressViewController
-            vc.snapshotViewContent = self!.view.snapshotViewAfterScreenUpdates(false)
-            self!.presentViewController(vc, animated: false) {
+        peoplePicker.dismissViewControllerAnimated(false) { [unowned self] in
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ProgressViewController") as! ProgressViewController
+            vc.snapshotViewContent = self.view.snapshotViewAfterScreenUpdates(false)
+            self.presentViewController(vc, animated: false) {
                 // not my bug: swift can't cast strait from CFString to String, so a casting from CFString to NSString is needed in the middle
                 let name: NSString = ABRecordCopyCompositeName(person).takeRetainedValue()
                 if(property == kABPersonPhoneProperty) {
                     let phones: ABMultiValueRef = ABRecordCopyValue(person, property).takeRetainedValue()
                     // not my bug: same as above reason
                     let phone: NSString = ABMultiValueCopyValueAtIndex(phones, ABMultiValueGetIndexForIdentifier(phones, identifier)).takeRetainedValue() as! NSString
-                    self!.connections.invite(name: name as String, phone: phone as String,
-                        success: { [weak self] (connection) -> () in
-                            self!.sendInvitation(connection)
+                    self.connections.invite(name: name as String, phone: phone as String,
+                        success: { [unowned self] (connection) -> () in
+                            self.dismissViewControllerAnimated(false, completion: nil)
+                            self.sendInvitation(connection)
                         },
-                        fail: { [weak self] (error) -> () in
+                        fail: { [unowned self] (error) -> () in
+                            self.dismissViewControllerAnimated(false, completion: nil)
                             let alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
                             let title = NSLocalizedString("OK", comment: "OK")
                             alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
-                            self!.presentViewController(alert, animated: true, completion: nil)
+                            self.presentViewController(alert, animated: true, completion: nil)
                     })
                 }
             }
