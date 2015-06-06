@@ -131,18 +131,18 @@ extension JSONValue: SequenceType {
             enumerator = nil
         }
         if let enumerator = enumerator {
-            return GeneratorOf {
-                let value: AnyObject? = enumerator.nextObject()
-                if let value: AnyObject = value {
-                    return JSONValue.fromObject(value)
-                } else {
-                    return nil
-                }
-            }
         } else {
             return GeneratorOf {
                 return nil;
             }
+        }
+        return GeneratorOf {
+            let value: AnyObject? = enumerator!.nextObject()
+            if let value: AnyObject = value {
+            } else {
+                return nil
+            }
+            return JSONValue.fromObject(value!)
         }
     }
     
