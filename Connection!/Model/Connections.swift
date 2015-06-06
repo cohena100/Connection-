@@ -193,4 +193,18 @@ public class Connections {
                 fail(error)
         }
     }
+    
+    // MARK: Use only for testing!
+    
+    public func count() -> Int {
+        Log.call(functionName: __FUNCTION__, message: "")
+        var error: NSError?
+        let connections = coreDataStack.fetch("Connection", error: &error) as? [Connection]
+        if let connections = connections {
+        } else {
+            return 0
+        }
+        return connections!.count
+    }
+    
 }

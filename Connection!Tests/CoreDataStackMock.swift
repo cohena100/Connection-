@@ -12,26 +12,27 @@ import CoreData
 
 class CoreDataStackMock: CoreDataStack {
     
-    override init() {
-        super.init()
-        self.persistentStoreCoordinator = {
-            var psc = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-            var error: NSError? = nil
-            if let ps = psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: &error) {
-                return psc
-            } else {
-                abort()
-            }
-            }()
-        self.mainContext = {
-            var mainContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-            mainContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator
-            return mainContext
-            }()
+    init() {
+        super.init(testing: true)
+        var modelPath = NSBundle.mainBundle().pathForResource("Model", ofType: "momd")
+        var modelURL = NSURL.fileURLWithPath(modelPath!)
+        let model = NSManagedObjectModel(contentsOfURL: modelURL!)!
+        var psc = NSPersistentStoreCoordinator(managedObjectModel: model)
+        var error: NSError? = nil
+        if let ps = psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration:nil, URL: nil, options: nil, error: &error) {
+        } else {
+            abort()
+        }
+        mainContext = NSManagedObjectContext()
+        mainContext.persistentStoreCoordinator = psc
     }
     
     override func save() {
-        
+//        var error: NSError?
+//        let saved = mainContext.save(&error)
+//        if (!saved) {
+//            Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
+//            abort()
+//        }
     }
 }

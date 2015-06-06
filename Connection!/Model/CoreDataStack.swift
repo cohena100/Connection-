@@ -13,61 +13,51 @@ public class CoreDataStack {
     
     static let sharedInstance = CoreDataStack()
     
-    public init() {
+    let rootContext: NSManagedObjectContext!
+    public var mainContext: NSManagedObjectContext!
+    let derivedContext: NSManagedObjectContext!
+    
+    convenience init() {
+        self.init(testing: false)
     }
     
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    public var managedObjectModel: NSManagedObjectModel = {
+    public init(testing: Bool) {
+        if testing {
+            rootContext = nil
+            mainContext = nil
+            derivedContext = nil
+            return
+        }
         var modelPath = NSBundle.mainBundle().pathForResource("Model", ofType: "momd")
         var modelURL = NSURL.fileURLWithPath(modelPath!)
-        var model = NSManagedObjectModel(contentsOfURL: modelURL!)!
-        return model
-        }()
-    
-    lazy var applicationDocumentsDirectory: NSURL = {
+        let model = NSManagedObjectModel(contentsOfURL: modelURL!)!
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count - 1] as! NSURL
-        }()
-    
-    public lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("Connection.sqlite")
+        let  url = (urls[urls.count - 1] as! NSURL).URLByAppendingPathComponent("Connection.sqlite")
         var options = [NSInferMappingModelAutomaticallyOption: true, NSMigratePersistentStoresAutomaticallyOption: true]
-        var psc = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        var psc = NSPersistentStoreCoordinator(managedObjectModel: model)
         var error: NSError? = nil
         if let ps = psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration:nil, URL: url, options: options, error: &error) {
-            return psc
         } else {
             abort()
         }
-        }()
-    
-    public lazy var rootContext: NSManagedObjectContext? = {
-        var context: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        context.persistentStoreCoordinator = self.persistentStoreCoordinator
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
-        }()
-    
-    public lazy var mainContext: NSManagedObjectContext? = {
-        var mainContext: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        rootContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        rootContext.persistentStoreCoordinator = psc
+        rootContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        mainContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         mainContext.parentContext = self.rootContext
         mainContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        derivedContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        derivedContext.parentContext = self.mainContext
+        derivedContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "mainContextDidSave:", name: NSManagedObjectContextDidSaveNotification, object: mainContext)
-        return mainContext
-        }()
+    }
     
-    public func newDerivedContext() -> NSManagedObjectContext {
-        var context: NSManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        context.parentContext = self.mainContext
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "mainContextDidSave:", object: mainContext)
     }
     
     public func saveContext(context: NSManagedObjectContext) {
-        if context.parentContext === self.mainContext {
+        if context.parentContext === mainContext {
             saveDerivedContext(context)
             return
         }
@@ -85,7 +75,7 @@ public class CoreDataStack {
     }
     
     public func saveDerivedContext(context: NSManagedObjectContext) {
-        context.performBlock() { [weak self] in
+        context.performBlock() { [unowned self] in
             var error: NSError? = nil
             if !(context.obtainPermanentIDsForObjects(Array(context.insertedObjects), error: &error)) {
                 Log.fail(functionName: __FUNCTION__, message: "Error obtaining permanent IDs for \(context.insertedObjects), \(error)")
@@ -94,30 +84,30 @@ public class CoreDataStack {
                 Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
                 abort()
             }
-            self!.saveContext(self!.mainContext!)
+            self.saveContext(self.mainContext)
         }
     }
     
     public func save() {
-        saveContext(mainContext!)
+        saveContext(mainContext)
     }
     
     func deleteObject(object: NSManagedObject) {
-        mainContext!.deleteObject(object)
+        mainContext.deleteObject(object)
         save()
     }
     
     func fetch(entity: String, predicate: NSPredicate? = nil, inout error: NSError?) -> [AnyObject]? {
         let request = NSFetchRequest(entityName:entity)
         request.predicate =  predicate
-        return mainContext!.executeFetchRequest(request, error: &error)
+        return mainContext.executeFetchRequest(request, error: &error)
     }
     
     func fetchOne(entity: String, predicate: NSPredicate? = nil, inout error: NSError?) -> AnyObject? {
         let request = NSFetchRequest(entityName:entity)
         request.predicate =  predicate
         request.fetchLimit = 1
-        let elements = mainContext!.executeFetchRequest(request, error: &error)
+        let elements = mainContext.executeFetchRequest(request, error: &error)
         if let elements = elements {
             
         } else {
@@ -134,7 +124,7 @@ public class CoreDataStack {
         let sortDescriptor = NSSortDescriptor(key: "created", ascending: false)
         request.sortDescriptors = [sortDescriptor]
         request.fetchLimit = 1
-        let objects = mainContext!.executeFetchRequest(request, error: &error)
+        let objects = mainContext.executeFetchRequest(request, error: &error)
         if let objects = objects {
         } else {
             return nil
@@ -148,7 +138,7 @@ public class CoreDataStack {
     }
     
     @objc func mainContextDidSave(notification: NSNotification) {
-        saveContext(self.rootContext!)
+        saveContext(self.rootContext)
     }
     
 }
