@@ -127,7 +127,7 @@ public class Connections {
     
     // MARK: Delete Connections
     
-    public func deleteLastConnection(#success: (Connection) -> (), fail: (NSError) -> ()) {
+    public func deleteLastConnection(#success: () -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "")
         var error: NSError?
         let connection = coreDataStack.getLastObject("Connection", error: &error) as? Connection
@@ -146,18 +146,18 @@ public class Connections {
             return
         }
         deleteConnection(connection!, success: { (connection) -> () in
-            success(connection)
+            success()
             }) { (error) -> () in
                 fail(error)
         }
     }
     
-    private func deleteConnection(connection: Connection, success: (Connection) -> (), fail: (NSError) -> ()) {
+    private func deleteConnection(connection: Connection, success: () -> (), fail: (NSError) -> ()) {
         Log.call(functionName: __FUNCTION__, message: "")
         cloud.deleteConnection(connection,
             success: { [weak self] (json) in
                 self!.coreDataStack.deleteObject(connection)
-                success(connection)
+                success()
             }) { [weak self] (error) in
                 fail(error)
         }

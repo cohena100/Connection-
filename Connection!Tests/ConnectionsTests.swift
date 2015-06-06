@@ -159,19 +159,6 @@ class ConnectionsTests: XCTestCase {
         }
     }
     
-    func testInvite_invite3ConnectionButDeleteTheLast_onlyLastIsDeleted() {
-        inviteConnections(3)
-        parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject(["cid": cid3])!)
-        connections.deleteLastConnection(
-            success: { [unowned self] (connection) -> () in
-                XCTAssertEqual(connection.cid, self.cid3, "cid should be cid3")
-            },
-            fail: { (error) -> () in
-                XCTFail("this method should call should not end up with an error")
-            }
-        )
-    }
-    
     func testInvite_invite1ConnectionButDeleteItAndThenDeleteLastAgain_returnError() {
         inviteConnections(1)
         deleteLastConnection()

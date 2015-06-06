@@ -36,6 +36,7 @@ class LocationsTests: XCTestCase {
     var cloud: Cloud!
     var parseWrapper: ParseWrapperMock!
     var locationManagerWrapper: LocationManagerWrapperMock!
+    var coreDataStackMock: CoreDataStackMock!
     var locations: Locations!
     var connections: Connections!
     var didEnterLocationWasCalled = false
@@ -46,8 +47,9 @@ class LocationsTests: XCTestCase {
         parseWrapper = ParseWrapperMock()
         cloud = Cloud(parse: parseWrapper)
         locationManagerWrapper = LocationManagerWrapperMock()
-        connections = Connections(coreDataStack: CoreDataStackMock(), cloud: cloud)
-        locations = Locations(coreDataStack: CoreDataStackMock(), cloud: cloud, locationManagerWrapper: locationManagerWrapper)
+        coreDataStackMock = CoreDataStackMock()
+        connections = Connections(coreDataStack: coreDataStackMock, cloud: cloud)
+        locations = Locations(coreDataStack: coreDataStackMock, cloud: cloud, locationManagerWrapper: locationManagerWrapper)
         locationManagerWrapper.delegate = locations
         locations.delegate = self
     }
@@ -55,6 +57,7 @@ class LocationsTests: XCTestCase {
     override func tearDown() {
         locations = nil
         connections = nil
+        coreDataStackMock = nil
         locationManagerWrapper = nil
         cloud = nil
         parseWrapper = nil
@@ -133,6 +136,16 @@ class LocationsTests: XCTestCase {
         }
     }
     
+    func deleteLastConnection() {
+        connections.deleteLastConnection(
+            success: { (connection) -> () in
+            },
+            fail: { (error) -> () in
+                XCTFail("this method should call should not end up with an error")
+            }
+        )
+    }
+    
     func testAddEnterLocation_anEnterLocation_enterLocationAdded() {
         inviteConnections(1)
         parseWrapper.result = ParseWrapperMock.Result.Success(JSONValue.fromObject([cid1])!)
@@ -209,6 +222,11 @@ class LocationsTests: XCTestCase {
         parseWrapper.result = ParseWrapperMock.Result.Fail(NSError())
         locationManagerWrapper.didEnterLocation(lid: lid1)
         XCTAssertTrue(didEnterLocationButErrorWasCalled, "correct delgate method should have been called")
+    }
+    func testLocationEntered_addEnterLocationButDeleteTheConnection_SendingDidEnterLocationWithEmptyConnections() {
+        addLocation(1)
+        deleteLastConnection()
+        locationManagerWrapper.didEnterLocation(lid: lid1)
     }
     
 }

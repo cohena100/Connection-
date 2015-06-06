@@ -19,6 +19,11 @@ class ParseWrapperMock: ParseWrapper {
     var result: Result!
     
     override func call(#function: String, withParameters parameters: [NSObject : AnyObject]?, success: (JSONValue) -> (), fail: (NSError) -> ()) {
+        if let parameters = parameters {
+            Log.call(functionName: __FUNCTION__, message: "\(function), \(parameters)")
+        } else {
+            Log.call(functionName: __FUNCTION__, message: "\(function), with no parameters")
+        }
         switch result! {
         case .Success(let json):
             success(json)

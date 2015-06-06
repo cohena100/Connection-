@@ -29,6 +29,7 @@ class LocationsParseTests: XCTestCase {
     var cloud: Cloud!
     var parseWrapper: ParseWrapper!
     var locationManagerWrapper: LocationManagerWrapperMock!
+    var coreDataStackMock: CoreDataStackMock!
     var locations: Locations!
     var connections: Connections!
     var didEnterLocationWasCalled = false
@@ -40,8 +41,9 @@ class LocationsParseTests: XCTestCase {
         parseWrapper = ParseWrapper()
         cloud = Cloud(parse: parseWrapper)
         locationManagerWrapper = LocationManagerWrapperMock()
-        connections = Connections(coreDataStack: CoreDataStackMock(), cloud: cloud)
-        locations = Locations(coreDataStack: CoreDataStackMock(), cloud: cloud, locationManagerWrapper: locationManagerWrapper)
+        coreDataStackMock = CoreDataStackMock()
+        connections = Connections(coreDataStack: coreDataStackMock, cloud: cloud)
+        locations = Locations(coreDataStack: coreDataStackMock, cloud: cloud, locationManagerWrapper: locationManagerWrapper)
         locationManagerWrapper.delegate = locations
         locations.delegate = self
     }
@@ -49,6 +51,7 @@ class LocationsParseTests: XCTestCase {
     override func tearDown() {
         locations = nil
         connections = nil
+        coreDataStackMock = nil
         locationManagerWrapper = nil
         cloud = nil
         parseWrapper = nil

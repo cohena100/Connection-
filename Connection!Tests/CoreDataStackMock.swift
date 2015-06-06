@@ -28,11 +28,11 @@ class CoreDataStackMock: CoreDataStack {
     }
     
     override func save() {
-//        var error: NSError?
-//        let saved = mainContext.save(&error)
-//        if (!saved) {
-//            Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
-//            abort()
-//        }
+        var error: NSError?
+        let saved = mainContext.save(&error)
+        if (!saved) {
+            Log.fail(functionName: __FUNCTION__, message: "Unresolved core data error: \(error)")
+            abort()
+        }
     }
 }

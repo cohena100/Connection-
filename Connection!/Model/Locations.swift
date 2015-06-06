@@ -75,17 +75,38 @@ public class Locations {
         return locations!
     }
     
-    public func deleteLocation(#lid: String) -> Location? {
+    public func getLocation(#lid: String) -> Location? {
+        Log.call(functionName: __FUNCTION__, message: "with lid: \(lid)")
+        let predicate =  NSPredicate(format: "%K LIKE %@", "lid", lid)
+        var error: NSError?
+        let locations = coreDataStack.fetch("Location", predicate: predicate, error: &error) as? [Location]
+        if let locations = locations {
+        } else {
+            Log.fail(functionName: __FUNCTION__, message: "Could not fetch locations with error: \(error)")
+            return nil
+        }
+        if locations!.count == 0 {
+            return nil
+        }
+        return locations![0]
+        
+    }
+    
+    public func deleteLocation(#lid: String) {
         let predicate =  NSPredicate(format: "%K LIKE %@", "lid", lid)
         var error: NSError?
         let location = coreDataStack.fetchOne("Location", predicate: predicate, error: &error) as? Location
         if let location = location {
         } else {
             Log.warn(functionName: __FUNCTION__, message: "Could not fetch location with error: \(error)")
-            return nil
+            return
         }
         coreDataStack.deleteObject(location!)
-        return location!
+        return
+    }
+    
+    public func deleteLocation(location: Location) {
+        coreDataStack.deleteObject(location)
     }
 
 }
@@ -95,15 +116,21 @@ public class Locations {
 extension Locations: LocationManagerWrapperDelegate {
     
     public func didEnterLocation(#lid: String) {
-        let location = deleteLocation(lid: lid)
+        let location = getLocation(lid: lid)
         if let location = location {
         } else {
             Log.warn(functionName: __FUNCTION__, message: "There should have been a location to delete")
             return
         }
-        let cids = Array(lazy(location!.connections as! Set<Connection>).map { (connection: Connection) -> String in
-            return connection.cid
-        })
+        let cids: [String]
+        if location!.connections.count > 0 {
+            cids = Array(lazy(location!.connections as! Set<Connection>).map { (connection: Connection) -> String in
+                return connection.cid
+                })
+        } else {
+            cids = []
+        }
+        deleteLocation(location!)
         cloud.didEnterLocation(cids: cids, success: { [unowned self] (json) -> () in
             self.delegate?.didEnterLocation(location: location!)
         }) { [unowned self] (error) -> () in
